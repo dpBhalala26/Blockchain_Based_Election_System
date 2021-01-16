@@ -1,0 +1,46 @@
+<mat-card class="login-card">
+    <mat-card-header>
+        <mat-card-title> Login </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form action="" method="post">
+            <table class="full-width">
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Enter your email</mat-label>
+                            <input matInput name="email" id="email" placeholder="user123@dp.in" [formControl]="email"
+                                required>
+                            <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Enter your password</mat-label>
+                            <input matInput name="pwd" id="pwd" [type]="hide ? 'password' : 'text'" [formControl]="pwd"
+                                required>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="pwd.invalid">{{getPwdErrorMessage()}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-error *ngIf='err'> {{ err | async }} </mat-error>
+                        <button mat-raised-button color="primary" (click)="login()" class="full-width" tabindex="0">Log
+                            in</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <br>
+        <mat-card-footer>
+            <span>Do not have an account? Click <a [routerLink]="['/auth/register']">here to register</a>. </span>
+        </mat-card-footer>
+    </mat-card-content>
+</mat-card>

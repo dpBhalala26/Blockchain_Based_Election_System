@@ -1,0 +1,85 @@
+<mat-card class="register-card">
+    <mat-card-header>
+        <mat-card-title> Register </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form action="" method="post" [formGroup]="userGroup">
+            <table class="full-width">
+                <tr>
+                    <td>
+
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Enter username</mat-label>
+                            <input matInput name="uname" id="uname" placeholder="user123"
+                                [formControl]="userGroup.get('uname')" required>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Enter your email</mat-label>
+                            <input matInput name="email" id="email" placeholder="user123@dp.in"
+                                [formControl]="userGroup.get('email')" required>
+                            <mat-error *ngIf="userGroup.get('email').invalid">{{getEmailErrorMessage()}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Enter your password</mat-label>
+                            <input matInput name="pwd" id="pwd" [type]="hide ? 'password' : 'text'"
+                                [formControl]="userGroup.get('pwd')" required>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="userGroup.get('pwd').invalid">{{getPwdErrorMessage()}}</mat-error>
+                            <mat-hint>Prefer combination of alphanumerics</mat-hint>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Enter password again</mat-label>
+                            <input matInput name="confpwd" id="confpwd" [type]="hide_conf ? 'password' : 'text'"
+                                [formControl]="userGroup.get('confpwd')" required>
+                            <button mat-icon-button matSuffix (click)="hide_conf = !hide_conf"
+                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide_conf">
+                                <mat-icon>{{hide_conf ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="userGroup.get('confpwd').invalid">{{getConfpwdErrorMessage()}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Enter Address</mat-label>
+                            <input matInput name="address" id="address"
+                                placeholder="Shaitan gali, Katra Mahel, Andher Nagar, Shamsaan Ghat ke Samne"
+                                [formControl]="userGroup.get('address')" required>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-error *ngIf='err'> {{ err | async }} </mat-error>
+                        <button mat-raised-button color="primary" (click)="register()" class="full-width"
+                            tabindex="0">Register</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <br><br>
+        <mat-card-footer>
+            <p></p>Already have an account? Click <a [routerLink]="['/auth/login']">here to login</a>.
+        </mat-card-footer>
+    </mat-card-content>
+</mat-card>

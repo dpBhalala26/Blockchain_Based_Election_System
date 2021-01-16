@@ -8,6 +8,11 @@ const routes: Routes = [
     pathMatch: 'full',
     component: HomeComponent,
   },
+  {
+    path: 'auth',
+    pathMatch: 'prefix',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+  },
 ];
 
 @NgModule({
