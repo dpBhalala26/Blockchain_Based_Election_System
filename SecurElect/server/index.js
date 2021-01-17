@@ -1,11 +1,11 @@
-const express = require("express");
-const path = require("path");
-const port = process.env.port || 4200;
-const app = express();
+const app = require('./config/express');
+const config = require('./config/config');
 
-const disDir = path.join(__dirname, "../dist/SecurElect");
-app.use(express.static(disDir));
+// Initialize mongoDB via mongoose
+require('./config/mongoose');
 
-app.get("/", (req, res) => res.sendFile(path.join(disDir, "index.html")));
+// Listen to the port
+app.listen(config.port, () => {
+    console.log(`Server started on PORT number ${config.port} in ${config.env} Environment.`);
+});
 
-app.listen(port, () => console.log(`server running at ${port}`));
