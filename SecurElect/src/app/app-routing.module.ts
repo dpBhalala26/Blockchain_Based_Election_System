@@ -13,6 +13,16 @@ const routes: Routes = [
     pathMatch: 'prefix',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
   },
+  {
+    path: 'election-admin',
+    pathMatch: 'prefix',
+    loadChildren: () => import('./election-admin/election-admin.module').then((m) => m.ElectionAdminModule),
+  },
+  {
+    path: 'voter',
+    pathMatch: 'prefix',
+    loadChildren: () => import('./voter/voter.module').then((m) => m.VoterModule),
+  },
 ];
 
 @NgModule({

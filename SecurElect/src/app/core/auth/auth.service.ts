@@ -36,7 +36,7 @@ export class AuthService {
 
   }
 
-  private baseApiUrl = '/api/auth/';
+  private baseApiUrl = 'http://localhost:4250/api/auth/';
   private redierctUrlPostLogin = '';
 
   set redirectUrl(url: string) {
@@ -58,6 +58,12 @@ export class AuthService {
     return this.httpClient.post<userNtoken>(`${this.baseApiUrl}login`, loginCred).pipe(
       switchMap(({ user, token }) => {
         this.setUserAfterFound(user, token);
+        if(user.roles[0].name == "admin"){
+          this.redirectUrl = "election-admin/home"
+        }else if(user.roles[0].name == "voter"){
+          this.redirectUrl = "voter/home"
+        }
+        console.log(this.redierctUrlPostLogin)
         return of(this.redierctUrlPostLogin);
       }),
       catchError(err => {
@@ -68,7 +74,8 @@ export class AuthService {
   }
 
   auth_register(inputUser: any) {
-    // Make an API call to save user in DB and update the user subject 
+    // Make an API call to save user in DB and update the user subject
+    
     return this.httpClient.post<userNtoken>(`${this.baseApiUrl}register`, inputUser).pipe(
       switchMap(({ user, token }) => { // Happy path
         this.setUserAfterFound(user, token);

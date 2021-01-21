@@ -7,11 +7,10 @@ async function user_insert(user){
     console.log(`Bcrypting the password`, user);
     user.hashedPwd = bcrypt.hashSync(user.pwd, bcryptSalt);
     delete user.pwd;
-
+    var userInstance = new User(user)
     // make a mongoose db call to save user
-    console.log(`Saving User to DB : `, user);
-    return await new User(user).save();
-
+    console.log(`Saving User to DB : `, userInstance);
+    return await userInstance.save();
 }
 
 async function user_update(userId, user){
@@ -33,7 +32,7 @@ async function user_update(userId, user){
 }
 
 async function user_read_email_pwd(email, pwd){
-    let user = await User.findOne({email});
+    let user = await User.findOne({email:email});
     if( isUserValid( user, pwd, user.hashedPwd ) ){
         user = user.toObject();
         delete user.hashedPwd;
@@ -41,7 +40,7 @@ async function user_read_email_pwd(email, pwd){
         return user;
     }
     else{
-        console.log('In userController.user_read_email_pwd :: Returned null')
+        console.log('In userController.user_read_email_pwd :: Returned null :: Invalid credentials')
         return null;
     }
 }

@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { LogService } from 'src/app/core/utils/log.service';
 
 @Component({
   selector: 'rd-register',
@@ -11,15 +12,19 @@ import { AuthService } from 'src/app/core/auth/auth.service';
   styleUrls: ['./register.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class RegisterComponent implements OnInit {
+  
   uname: String;
   email: String;
   pwd: String;
   confpwd: String;
   address: String;
-
+  roleName: string;
+  roleRefKey: string;
   err: BehaviorSubject<string>;
-
+  roleBoxVisible:boolean = false;
+  roleList:Array<string> = ['voter','admin'];
   userGroup = new FormGroup({
     uname: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -30,7 +35,10 @@ export class RegisterComponent implements OnInit {
     ]),
     confpwd: new FormControl('', [Validators.required, this.confpwdMatcher]),
     address: new FormControl('', [Validators.required]),
+    roleName : new FormControl(''),
+    roleRefKey : new FormControl('')
   });
+
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -47,6 +55,10 @@ export class RegisterComponent implements OnInit {
     }
     this.setErr('');
     const user = this.userGroup.getRawValue();
+    user.roles = [{name:user.roleName,refKey:user.roleRefKey}]
+    user.status = "pending"
+    delete user.roleName
+    delete user.roleRefKey
     this.authService.auth_register(user).subscribe(
       (redirectUrl) => {
         this.openSnackBar('Account registered ', 'Successfully !');
@@ -54,6 +66,15 @@ export class RegisterComponent implements OnInit {
       },
       (e) => this.setErr('Register failed. Please try again.')
     );
+  }
+
+  toggleRoleBox(){
+    console.log(this.userGroup.get("roleName").value+"hello")
+    if(this.userGroup.get("roleName").value == "admin"){
+      this.roleBoxVisible=true;
+    }else{
+      this.roleBoxVisible=false;
+    }
   }
 
   getEmailErrorMessage() {

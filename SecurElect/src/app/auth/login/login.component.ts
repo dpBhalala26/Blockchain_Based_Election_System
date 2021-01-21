@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
     this.setErr('');
     this.authService.auth_login(this.email.value, this.pwd.value).subscribe(
       (redirectUrl) => {
+        
         this.openSnackBar('Logged in ', 'Successfully !');
         this.router.navigate([redirectUrl]);
       },

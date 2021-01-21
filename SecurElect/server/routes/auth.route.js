@@ -15,11 +15,19 @@ router.post("/register", asyncHandler(user_insert), login);
 // localhost:xxxx/api/auth/register
 async function user_insert(req, res, next) {
   const user = req.body;
+  
   console.log(`registering user :: `, user);
+  if( user.role!=null && !isRoleRefKeyValid(user.roles[0])){
+    console.log(`registeration error :: `, user);
+    next();
+  }
   req.user = await userControler.user_insert(user);
   next();
 }
-
+function isRoleRefKeyValid(role){
+  /* Verify here */
+  return true
+}
 //router.post('/login', passport.authenticate('local', {session: false}), login);
 router.post("/login", asyncHandler(user_read_email_pwd), login);
 router.post("/old_pwd_validate", asyncHandler(user_read_email_pwd), sendUser);
@@ -85,7 +93,7 @@ function sendUser(req, res) {
   console.log(user, ` :: In sendUser() :::::::::::::::::::::::::::::::::::::::::::::: `);
   const token = null;
   if (user == null) {
-    throw new Error("Error from login func in auth.route.js");
+    throw new Error("Error from login func in auth.route.js :: User Not valid");
   }
   res.json({ user, token });
 }

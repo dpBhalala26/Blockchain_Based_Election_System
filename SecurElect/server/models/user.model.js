@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { stringifyConfiguration } = require('tslint/lib/configuration');
 const userSchema = new mongoose.Schema({
     uname: {
         type: String,
@@ -22,12 +23,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    roles: [
+    publicKey:{
+        type: String
+    },
+    status:{
+        type: String,
+        required: true
+    },
+    statusIssueMessage:{
+        type: String
+    },
+    
+    roles:[
         {
-            type: String
-        }
-    ],
+            name :String,
+            refKey : String
+        }]
+    ,
     versionKey: false
 });
-
 module.exports = mongoose.model( 'User', userSchema );

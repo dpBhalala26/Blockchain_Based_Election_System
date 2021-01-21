@@ -7,7 +7,6 @@
             <table class="full-width">
                 <tr>
                     <td>
-
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-label>Enter username</mat-label>
                             <input matInput name="uname" id="uname" placeholder="user123"
@@ -65,6 +64,29 @@
                             <input matInput name="address" id="address"
                                 placeholder="Shaitan gali, Katra Mahel, Andher Nagar, Shamsaan Ghat ke Samne"
                                 [formControl]="userGroup.get('address')" required>
+                        </mat-form-field>
+                    </td>
+                </tr>
+
+                
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Role</mat-label>
+                            <mat-select matNativeControl formControlName="roleName" (selectionChange)="toggleRoleBox()">
+                                <mat-option>Choose Role</mat-option>
+                                <mat-option *ngFor="let role of roleList" [value]="role">{{role}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr *ngIf="roleBoxVisible">
+                    <td>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Referance Key</mat-label>
+                            <input matInput name="address" id="address"
+                                placeholder="abcd-12132ads-babd12354"
+                                [formControl]="userGroup.get('roleRefKey')" required>
                         </mat-form-field>
                     </td>
                 </tr>
