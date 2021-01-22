@@ -79,6 +79,7 @@ async function delete_the_user(req, res, next) {
 
 function login(req, res) {
   // throw new Error('Self generated error from self');
+  console.log("Inside login")
   const user = req.user;
   const token = authController.generateToken(user);
   console.log(user, token);

@@ -1,0 +1,39 @@
+
+<div style="height: 100vh" >
+    <mat-toolbar color="primary" >
+      <mat-toolbar-row >
+          
+          <span class="left-spacer"></span>
+          <span class="dp-title">SecurElect</span>
+          <span class="example-spacer"></span>
+          <span class="left-spacer"></span>
+          <div fxShow="true" fxHide.lt-md="true">
+            <button mat-icon-button class="example-icon favorite-icon logo" routerLink="home"
+              routerLinkActive="active-link">
+              <mat-icon>home</mat-icon>
+            </button>
+          </div>
+  
+        <span class="acc-spacer"></span>
+  
+        <button mat-icon-button  [matMenuTriggerFor]="acc_menu" aria-label="Example icon-button with a menu" routerLinkActive="active-link">
+          <mat-icon>account_box</mat-icon>
+        </button>
+        <mat-menu #acc_menu="matMenu" xPosition="before">
+          <div >
+            <button mat-menu-item routerLink="/auth/login" routerLinkActive="active-link">
+              <mat-icon>login</mat-icon>
+              <span>Log in</span>
+            </button>
+            <button mat-menu-item routerLink="/auth/register" routerLinkActive="active-link">
+              <mat-icon>person_add</mat-icon>
+              <span>Register</span>
+            </button>
+          </div>
+          
+        </mat-menu>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+  
+  <!-- <router-outlet></router-outlet> -->

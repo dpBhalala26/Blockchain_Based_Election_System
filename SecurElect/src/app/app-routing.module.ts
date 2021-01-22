@@ -9,6 +9,11 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
+    path: 'home',
+    pathMatch: 'full',
+    component: HomeComponent,
+  },
+  {
     path: 'auth',
     pathMatch: 'prefix',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),

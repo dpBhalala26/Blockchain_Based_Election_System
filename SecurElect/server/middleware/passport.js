@@ -26,6 +26,7 @@ const jwtLogin = new PassportJwtStratagy(
         secretOrKey: config.jwtSecretKey
     },
     async ( payload, done ) => {
+        console.log("in middleware/pasport.js/jwdLogin")
         const user = await userController.getUserByID(payload._id);
         return user ? done(null, user) : done(null, false, {error: "Your login details are Wrong! please try again."});
     }

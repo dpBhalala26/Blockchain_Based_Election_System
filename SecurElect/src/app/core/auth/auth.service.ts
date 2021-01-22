@@ -94,6 +94,7 @@ export class AuthService {
 
   findJWT() {
     const token = this.tokenStorageService.getToken();
+    console.log("token retrived is",token)
     if (!token) {
       return EMPTY;
     }
@@ -111,6 +112,7 @@ export class AuthService {
 
   private setUserAfterFound(user: User, token: string) {
     this.setUser(user);
+    console.log("Setting token",token)
     this.tokenStorageService.setToken(token);
     this.logService.log('User found : ', user);
   }
