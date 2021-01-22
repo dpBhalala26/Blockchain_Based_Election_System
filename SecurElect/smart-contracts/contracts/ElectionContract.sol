@@ -56,10 +56,11 @@ contract ElectionContract {
             msg.sender == admin,
             "ERROR : Admin is allowed to make a person eligible to vote."
         );
-        require(
-            !voters[voterAddress].voted,
-            "ERROR : This voter has voted in this election."
-        );
+        // require(
+        //     !voters[voterAddress].voted,
+        //     "ERROR : This voter has voted in this election."
+        // );
+        // Redundancy commented
         require(
             !voters[voterAddress].eligible,
             "INFO : This person is already eligible to vote."
