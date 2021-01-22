@@ -1,0 +1,5 @@
+
+  <rd-voter-header [user]='user' (logoutEvent)="logout()" *ngIf="user && user.roles[0].name == 'voter'" ></rd-voter-header>
+  <rd-election-admin-header [user]='user' (logoutEvent)="logout()" *ngIf="user && user.roles[0].name == 'admin'" ></rd-election-admin-header>
+  <rd-anonymous-header *ngIf = "!user"></rd-anonymous-header>
+  
