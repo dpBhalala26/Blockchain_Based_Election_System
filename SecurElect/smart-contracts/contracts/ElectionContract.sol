@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 /// @title SecurElect Election Smart Contract
 contract ElectionContract {
     enum electionStatus {beforeStart, started, ended}
-    electionStatus currentElectionStatus;
+    electionStatus public currentElectionStatus;
 
     address public admin;
 
@@ -19,7 +19,7 @@ contract ElectionContract {
     // Array of candidates.
     // Array size is dynamic so that we can use the contract for different elcetions
     Candidate[] public candidates;
-    uint256 winningCandidateId;
+    uint256[] public winningCandidateIDs;
 
     // Structure definition of the voter
     struct Voter {
@@ -112,10 +112,10 @@ contract ElectionContract {
     }
 
     // returning the candidate details of the winner.
-    function getWinnerCandidate()
+    function getWinnerCandidateIDs()
         public
         view
-        returns (Candidate memory winnerCandidate)
+        returns (uint256[] memory winnerCandidateIDs)
     {
         // Winner candidate can be get only when the election is ended.
         require(
@@ -123,7 +123,7 @@ contract ElectionContract {
             "ERROR : Cannot get winner candidate details before the election is ended."
         );
 
-        winnerCandidate = candidates[winningCandidateId];
+        winnerCandidateIDs = winningCandidateIDs;
     }
 
     // changing the status of election from 'beforeStart' to 'started'
@@ -132,6 +132,12 @@ contract ElectionContract {
         require(
             msg.sender == admin,
             "ERROR : Admin is allowed to initiate the voting process"
+        );
+
+        // Election must not be ended.
+        require(
+            currentElectionStatus != electionStatus.ended,
+            "ERROR : The Elcetion can not be started again after it is ended."
         );
         currentElectionStatus = electionStatus.started;
     }
@@ -147,18 +153,18 @@ contract ElectionContract {
 
         require(
             currentElectionStatus == electionStatus.started,
-            "ERROR : Election is not running."
+            "ERROR : Election has not started yet."
         );
         currentElectionStatus = electionStatus.ended;
 
-        uint256 maxVoteCandIndex; // to track the index of maximum voted candidate
+        //uint256 maxVoteCandIndex; // to track the index of maximum voted candidate
         uint256 maxVoteCount = 0; // to keep track of maximum votes so far
 
         // Finding the maximum votes and its candidate index
         for (uint256 k = 0; k < candidates.length; k++) {
             if (candidates[k].voteCount > maxVoteCount) {
                 maxVoteCount = candidates[k].voteCount;
-                maxVoteCandIndex = k;
+                //maxVoteCandIndex = k;
             }
         }
 
@@ -167,6 +173,14 @@ contract ElectionContract {
             "ERROR : No voter has voted yet in the election so far."
         );
 
-        winningCandidateId = maxVoteCandIndex;
+        //winningCandidateId = maxVoteCandIndex;
+
+        // Loop is used to handle "TIE" condition between multiple candidates.
+        // Adding candidate IDs to the winning list.
+        for (uint256 l = 0; l < candidates.length; l++) {
+            if (candidates[l].voteCount == maxVoteCount) {
+                winningCandidateIDs.push(candidates[l].candId);
+            }
+        }
     }
 }
