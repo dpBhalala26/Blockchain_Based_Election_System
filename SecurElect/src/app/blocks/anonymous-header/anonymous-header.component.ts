@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { User } from 'src/app/core/user';
 
 @Component({
   selector: 'rd-anonymous-header',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./anonymous-header.component.scss']
 })
 export class AnonymousHeaderComponent implements OnInit {
-
+  @Input() user: User;
   constructor() { }
 
   ngOnInit(): void {
