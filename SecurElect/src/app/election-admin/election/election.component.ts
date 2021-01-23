@@ -8,7 +8,7 @@ export interface Election {
 }
 
 const ELECTION_DATA: Election[] = [
-  {position: 1, name: 'Hydrogen', start: new Date("22/01/2021"), end: new Date("22-01-2021")},
+  {position: 1, name: 'Project Lead', start: new Date('2021-01-22'), end: new Date('2021-01-23')},
   
 ];
 
@@ -20,10 +20,20 @@ const ELECTION_DATA: Election[] = [
 export class ElectionComponent implements OnInit {
 
   displayedColumns: string[] = ['position', 'name', 'start', 'end'];
-  electionDataSource:any = ELECTION_DATA;
+  electionDataSource:any = [
+    {position: 1, name: 'Project Lead', start: new Date('2021-01-22'), end: new Date('2021-01-23')},
+    
+  ];
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  addElection(election){
+    election.position = "2";
+    this.electionDataSource.push(election);
+    console.log("got election",election)
+
   }
 }

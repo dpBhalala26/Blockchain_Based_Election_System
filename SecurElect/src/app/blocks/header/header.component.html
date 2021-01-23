@@ -2,4 +2,186 @@
   <rd-voter-header [user]='user' (logoutEvent)="logout()" *ngIf="user && user.roles[0].name == 'voter'" ></rd-voter-header>
   <rd-election-admin-header [user]='user' (logoutEvent)="logout()" *ngIf="user && user.roles[0].name == 'admin'" ></rd-election-admin-header>
   <rd-anonymous-header *ngIf = "!user"></rd-anonymous-header>
+
+<!--   
+<div style="height: 100vh" *ngIf = "!user">
+  <mat-toolbar color="primary" >
+    <mat-toolbar-row >
+        <span class="left-spacer"></span>
+        <span class="dp-title">SecurElect</span>
+        <span class="example-spacer"></span>
+        <span class="left-spacer"></span>
+        <div fxShow="true" fxHide.lt-md="true">
+          <button mat-icon-button class="example-icon favorite-icon logo" routerLink="home"
+            routerLinkActive="active-link">
+            <mat-icon>home</mat-icon>
+          </button>
+        </div>
+
+      <span class="acc-spacer"></span>
+
+      <button mat-icon-button  [matMenuTriggerFor]="acc_menu" aria-label="Example icon-button with a menu" routerLinkActive="active-link">
+        <mat-icon>account_box</mat-icon>
+      </button>
+      <mat-menu #acc_menu="matMenu" xPosition="before">
+        <div >
+          <button mat-menu-item routerLink="/auth/login" routerLinkActive="active-link">
+            <mat-icon>login</mat-icon>
+            <span>Log in</span>
+          </button>
+          <button mat-menu-item routerLink="/auth/register" routerLinkActive="active-link">
+            <mat-icon>person_add</mat-icon>
+            <span>Register</span>
+          </button>
+        </div>
+        
+      </mat-menu>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <router-outlet></router-outlet>  
+</div>
+
+
+
+
+  <div style="height: 100vh" *ngIf="user && user.roles[0].name == 'admin'">
+    <mat-toolbar color="primary" >
+      <mat-toolbar-row >
+          <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
+            <mat-icon>menu</mat-icon>
+          </button>
+          
+          <span class="left-spacer"></span>
+          <span class="dp-title">SecurElect Election Admin</span>
+          <span class="example-spacer"></span>
+          <span class="left-spacer"></span>
+          <div fxShow="true" fxHide.lt-md="true">
+            <button mat-icon-button class="example-icon favorite-icon logo" routerLink="/election-admin/home"
+              routerLinkActive="active-link">
+              <mat-icon>home</mat-icon>
+            </button>
+          </div>
   
+        <span class="acc-spacer"></span>
+  
+        <button mat-icon-button  [matMenuTriggerFor]="acc_menu" aria-label="Example icon-button with a menu" routerLinkActive="active-link">
+          <mat-icon>account_box</mat-icon>
+        </button>
+        <mat-menu #acc_menu="matMenu" xPosition="before">
+          <div *ngIf="!user">
+            <button mat-menu-item routerLink="/auth/login" routerLinkActive="active-link">
+              <mat-icon>login</mat-icon>
+              <span>Log in</span>
+            </button>
+            <button mat-menu-item routerLink="/auth/register" routerLinkActive="active-link">
+              <mat-icon>person_add</mat-icon>
+              <span>Register</span>
+            </button>
+          </div>
+          <div *ngIf="user">
+            <button mat-menu-item   routerLink="/auth/userprofile" routerLinkActive="active-link">
+              <mat-icon>person</mat-icon>
+              <span>{{ user.uname }}</span>
+            </button>
+            <button mat-menu-item (click)="logoutEvent.emit()">
+              <mat-icon>person_remove</mat-icon>
+              <span>Log out</span>
+            </button>
+          </div>
+        </mat-menu>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  
+    <mat-sidenav-container style="height: 100vh;" fxFlexFill>
+      <mat-sidenav #sidenav>
+        <mat-nav-list>
+          <a mat-list-item routerLink="election-admin/home" (click)="sidenav.toggle()">Home</a>
+        </mat-nav-list>
+        <mat-nav-list>
+          <a mat-list-item routerLink="election-admin/election" (click)="sidenav.toggle()">Election</a>
+        </mat-nav-list>
+        <mat-nav-list>
+          <a mat-list-item routerLink="election-admin/manage-voters" (click)="sidenav.toggle()">Voters</a>
+        </mat-nav-list>
+        <mat-nav-list>
+          <a mat-list-item routerLink="election-admin/candidate" (click)="sidenav.toggle()">Candidates</a>
+        </mat-nav-list>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+
+
+
+  <div style="height: 100vh" *ngIf="user && user.roles[0].name == 'voter'">
+    <mat-toolbar color="primary" >
+      <mat-toolbar-row *ngIf="user">
+          <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
+            <mat-icon>menu</mat-icon>
+          </button>
+          
+          <span class="left-spacer"></span>
+          <span class="dp-title">SecurElect Voter</span>
+          <span class="example-spacer"></span>
+          <span class="left-spacer"></span>
+          <div fxShow="true" fxHide.lt-md="true">
+            <button mat-icon-button class="example-icon favorite-icon logo" routerLink="/voter/home"
+              routerLinkActive="active-link">
+              <mat-icon>home</mat-icon>
+            </button>
+          </div>
+          
+        
+  
+        <span class="acc-spacer"></span>
+  
+        <button mat-icon-button  [matMenuTriggerFor]="acc_menu" aria-label="Example icon-button with a menu" routerLinkActive="active-link">
+          <mat-icon>account_box</mat-icon>
+        </button>
+        <mat-menu #acc_menu="matMenu" xPosition="before">
+          <div *ngIf="!user">
+            <button mat-menu-item routerLink="/auth/login" routerLinkActive="active-link">
+              <mat-icon>login</mat-icon>
+              <span>Log in</span>
+            </button>
+            <button mat-menu-item routerLink="/auth/register" routerLinkActive="active-link">
+              <mat-icon>person_add</mat-icon>
+              <span>Register</span>
+            </button>
+          </div>
+          <div *ngIf="user">
+            <button mat-menu-item   routerLink="/auth/userprofile" routerLinkActive="active-link">
+              <mat-icon>person</mat-icon>
+              <span>{{ user.uname }}</span>
+            </button>
+            <button mat-menu-item (click)="logoutEvent.emit()">
+              <mat-icon>person_remove</mat-icon>
+              <span>Log out</span>
+            </button>
+          </div>
+        </mat-menu>
+  
+        
+      </mat-toolbar-row>
+    </mat-toolbar>
+  
+    <mat-sidenav-container style="height: 100vh;" fxFlexFill>
+      <mat-sidenav #sidenav>
+        <mat-nav-list>
+          <a mat-list-item routerLink="voter/home" (click)="sidenav.toggle()">Home</a>
+        </mat-nav-list>
+        <mat-nav-list>
+          <a mat-list-item routerLink="voter/election-voting" (click)="sidenav.toggle()">Elections</a>
+        </mat-nav-list>
+        <mat-nav-list>
+          <a mat-list-item routerLink="#" (click)="sidenav.toggle()">About Us</a>
+        </mat-nav-list>
+  
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div> -->
