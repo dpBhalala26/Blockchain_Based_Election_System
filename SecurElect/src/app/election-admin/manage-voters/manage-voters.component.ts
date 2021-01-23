@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 
 export interface Voter{
-  name: string;
-  position: number;
-  start: Date;
-  end: Date;
+  uname: String;
+    email: String;
+    address: String;
+    publicKey:string;
+    status:string;
 }
 
 const VOTERS_DATA: Voter[] = [
-  {position: 1, name: 'Hydrogen', start: new Date("22/01/2021"), end: new Date("22-01-2021")},  
+  {uname: 'Voter1',email:"demo1@demo.com",address:"demo address",status:"pending", publicKey:""},  
+  {uname: 'Voter2',email:"demo2@demo.com",address:"demo address",status:"pending", publicKey:""},  
+  {uname: 'Voter3',email:"demo3@demo.com",address:"demo address",status:"pending", publicKey:""},  
 ];
 
 @Component({
@@ -18,7 +21,7 @@ const VOTERS_DATA: Voter[] = [
 })
 export class ManageVotersComponent implements OnInit {
 
-  displayedColumns: string[] = ['position', 'name', 'start', 'end'];
+  displayedColumns: string[] = ['uname', 'email', 'address', 'status','publicKey'];
   electionDataSource:any = VOTERS_DATA;
 
   constructor() { }
