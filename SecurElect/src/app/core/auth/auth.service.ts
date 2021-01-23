@@ -6,7 +6,7 @@ import { LogService } from '../utils/log.service';
 import { User } from '../user';
 import { TokenStorageService } from './token-storage.service';
 
-
+//
 interface userNtoken {
   user: User;
   token: string;
@@ -79,6 +79,11 @@ export class AuthService {
     return this.httpClient.post<userNtoken>(`${this.baseApiUrl}register`, inputUser).pipe(
       switchMap(({ user, token }) => { // Happy path
         this.setUserAfterFound(user, token);
+        if(user.roles[0].name == "admin"){
+          this.redirectUrl = "election-admin/home"
+        }else if(user.roles[0].name == "voter"){
+          this.redirectUrl = "voter/home"
+        }
         return of(this.redierctUrlPostLogin);
       }),
       catchError(err => {
