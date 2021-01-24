@@ -26,4 +26,10 @@ export class ElectionsComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  
+  addElection(election){
+    election.position = "2";
+    //this.electionDataSource.push(election);
+    console.log("got election",election)
+  }
 }
