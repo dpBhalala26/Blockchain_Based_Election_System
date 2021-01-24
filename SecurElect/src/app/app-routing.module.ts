@@ -28,6 +28,10 @@ const routes: Routes = [
     pathMatch: 'prefix',
     loadChildren: () => import('./voter/voter.module').then((m) => m.VoterModule),
   },
+  {
+    path: '**',
+    loadChildren: () => import('./shared/shared.module').then((m) => m.SharedModule),
+  },
 ];
 
 @NgModule({
