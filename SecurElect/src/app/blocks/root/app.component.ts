@@ -25,7 +25,7 @@ export class AppComponent {
   logout() {
     this.authService.auth_logout();
     this.openSnackBar('Logged Out ', 'Successfully !');
-    this.router.navigate(['/']);
+    this.router.navigate(['/auth/login']);
   }
 
   openSnackBar(message: string, action: string) {

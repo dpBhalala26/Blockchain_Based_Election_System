@@ -4,6 +4,9 @@ pragma experimental ABIEncoderV2;
 
 /// @title SecurElect Election Smart Contract
 contract ElectionContract {
+    enum electionStatus {beforeStart, started, ended}
+    electionStatus currentElectionStatus;
+
     address public admin;
 
     // Structure definition of the candidate
@@ -16,6 +19,7 @@ contract ElectionContract {
     // Array of candidates.
     // Array size is dynamic so that we can use the contract for different elcetions
     Candidate[] public candidates;
+    uint256 winningCandidateId;
 
     // Structure definition of the voter
     struct Voter {
@@ -30,8 +34,9 @@ contract ElectionContract {
     // constructor of election contract
     // candidates names are taken dynamically so that we can use the contract for different elcetions
     constructor(uint256[] memory candidateIds, string[] memory candidateNames) {
+        currentElectionStatus = electionStatus.beforeStart; // The has not started while generating the contract
         admin = msg.sender;
-        voters[admin].eligible = true;
+        voters[admin].eligible = true; // Admin can also vote in the election
 
         require(
             candidateIds.length == candidateNames.length,
@@ -51,15 +56,22 @@ contract ElectionContract {
 
     // Making the voter eligible to vote for the election
     function makeVoterEligible(address voterAddress) public {
+        // Admin can make voter eligible only before the election is started
+        require(
+            currentElectionStatus == electionStatus.beforeStart,
+            "ERROR : Cannot make a voter eligible after the election has started."
+        );
+
         // Message sender must be admin because only admin can make a person eligible for voting
         require(
             msg.sender == admin,
             "ERROR : Admin is allowed to make a person eligible to vote."
         );
-        require(
-            !voters[voterAddress].voted,
-            "ERROR : This voter has voted in this election."
-        );
+        // require(
+        //     !voters[voterAddress].voted,
+        //     "ERROR : This voter has voted in this election."
+        // );
+        // Redundancy commented
         require(
             !voters[voterAddress].eligible,
             "INFO : This person is already eligible to vote."
@@ -69,6 +81,12 @@ contract ElectionContract {
 
     // Voting function
     function vote(uint256 candidateId) public {
+        // Voter can only vote after the elction has started and before ended
+        require(
+            currentElectionStatus == electionStatus.started,
+            "ERROR : Cannot vote before or after the election"
+        );
+
         Voter storage voteSender = voters[msg.sender];
         require(
             voteSender.eligible,
@@ -93,12 +111,46 @@ contract ElectionContract {
         ); // Program reaches here only when invalid ID is entered.
     }
 
-    // Comparing the voteCount of canidates and returning the winner candidate
+    // returning the candidate details of the winner.
     function getWinnerCandidate()
         public
         view
         returns (Candidate memory winnerCandidate)
     {
+        // Winner candidate can be get only when the election is ended.
+        require(
+            currentElectionStatus == electionStatus.ended,
+            "ERROR : Cannot get winner candidate details before the election is ended."
+        );
+
+        winnerCandidate = candidates[winningCandidateId];
+    }
+
+    // changing the status of election from 'beforeStart' to 'started'
+    function initializeVotingProcess() public {
+        // Message sender must be admin because only admin can initiate the voting process
+        require(
+            msg.sender == admin,
+            "ERROR : Admin is allowed to initiate the voting process"
+        );
+        currentElectionStatus = electionStatus.started;
+    }
+
+    // changing the status of election status from 'started' to 'ended'
+    // Comparing the voteCount of canidates and setting the winner candidateId
+    function finalizeVotingProcess() public {
+        // Message sender must be admin because only admin can finalize the voting process
+        require(
+            msg.sender == admin,
+            "ERROR : Admin is allowed to finalize the voting process"
+        );
+
+        require(
+            currentElectionStatus == electionStatus.started,
+            "ERROR : Election is not running."
+        );
+        currentElectionStatus = electionStatus.ended;
+
         uint256 maxVoteCandIndex; // to track the index of maximum voted candidate
         uint256 maxVoteCount = 0; // to keep track of maximum votes so far
 
@@ -114,6 +166,7 @@ contract ElectionContract {
             maxVoteCount != 0,
             "ERROR : No voter has voted yet in the election so far."
         );
-        winnerCandidate = candidates[maxVoteCandIndex];
+
+        winningCandidateId = maxVoteCandIndex;
     }
 }

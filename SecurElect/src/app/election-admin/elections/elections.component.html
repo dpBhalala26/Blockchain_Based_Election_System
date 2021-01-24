@@ -31,3 +31,4 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+  <rd-set-election (electionAddeded)="addElection($event)"></rd-set-election>

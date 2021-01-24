@@ -1,0 +1,49 @@
+<mat-card class="register-card">
+<mat-card-header>
+    <mat-card-title> Register </mat-card-title>
+</mat-card-header>
+<mat-card-content>
+    <form action="" method="post" [formGroup]="electionGroup">
+        <table class="full-width">
+            <tr>
+                <td>
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Enter election Name</mat-label>
+                        <input matInput name="name" id="name" placeholder="Project Leade"
+                            [formControl]="electionGroup.get('name')" required>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Starting Date</mat-label>
+                        <input type="datetime-local" matInput name="startDate" id="startDate" 
+                            [formControl]="electionGroup.get('startDate')" required>
+                        <mat-error *ngIf="electionGroup.get('startDate').invalid">{{getStartDateErrorMessage()}}</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Ending Date</mat-label>
+                        <input type="datetime-local" matInput name="endDate" id="endDate" 
+                            [formControl]="electionGroup.get('endDate')" required>
+                        <mat-error *ngIf="electionGroup.get('endDate').invalid">{{getEndDateErrorMessage()}}</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+            <td>
+                <mat-error *ngIf='err'> {{ err | async }} </mat-error>
+                <button mat-raised-button color="primary" (click)="setElection()" class="full-width"
+                    tabindex="0">Set  Election</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</mat-card-content>
+</mat-card>
