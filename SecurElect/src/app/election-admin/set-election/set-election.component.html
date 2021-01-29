@@ -37,6 +37,17 @@
                 </td>
             </tr>
             <tr>
+                <td>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Description</mat-label>
+                        <input matInput name="description" id="description" 
+                            [formControl]="electionGroup.get('description')" required>
+                        <mat-error *ngIf="electionGroup.get('description').invalid">{{getdescriptionErrorMessage()}}</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
             <td>
                 <mat-error *ngIf='err'> {{ err | async }} </mat-error>
                 <button mat-raised-button color="primary" (click)="setElection()" class="full-width"

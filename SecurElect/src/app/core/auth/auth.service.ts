@@ -1,17 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, merge, of, Subject, throwError } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { LogService } from '../utils/log.service';
 import { User } from '../user';
 import { TokenStorageService } from './token-storage.service';
 
-//
 interface userNtoken {
   user: User;
   token: string;
 }
-
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +45,16 @@ export class AuthService {
   constructor(private httpClient: HttpClient, private tokenStorageService: TokenStorageService, private logService: LogService) { }
 
   get isUserLoggedIn() {
-    return this.user$.value !== null;
+
+    if(this.user$.value !== null){
+      return true;
+    }
+    else{
+      if(merge(this.findJWT(),this.user$)!=null){
+        return true;
+      }
+    }
+    return false;
   }
   get currentUser(){
     return this.user$.value;
@@ -130,8 +137,8 @@ export class AuthService {
   }
 
   auth_old_pwd_validate(email: string, oldpwd: string) {
-    const oldPwdEmailCred = { email, oldpwd };
-    return this.httpClient.post<userNtoken>(`${this.baseApiUrl}old_pwd_vaidate`, oldPwdEmailCred).pipe(
+    const oldPwdEmailCred = { email, pwd:oldpwd };
+    return this.httpClient.post<userNtoken>(`${this.baseApiUrl}old_pwd_validate`, oldPwdEmailCred).pipe(
       switchMap(({ user, token }) => {
         this.logService.log(token);
         this.logService.log("in auth_old_pwd_vali of authService and user is :: ", user);
@@ -143,7 +150,7 @@ export class AuthService {
       })
     );
   }
-
+  
   auth_update( inputUser: any){
     return this.httpClient.put<userNtoken>(`${this.baseApiUrl}update/${inputUser.email}`, inputUser).pipe(
       switchMap(({ user, token }) => { // Happy path

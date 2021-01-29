@@ -1,15 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Voter } from 'src/app/core/voter';
 
-export interface Voter{
-  id:string;
-  sr_num: number;
-  uname: String;
-  email: String;
-  address: String;
-  publicKey:string;
-  status:string;
-  statusIssueMessage:string;
-}
+
 
 const VOTERS_DATA: Voter[] = [
   {id:"1",sr_num: 1,uname:"voter1",email:"voter1@demo.com",address:"demo1",publicKey:"",status:"pending",statusIssueMessage:""},  

@@ -50,7 +50,18 @@ export class SetElectionComponent implements OnInit {
     });
   }
 
+
+
   private setErr(err: any) {
     return this.err.next(err);
+  }
+
+  getStartDateErrorMessage(){
+    if(this.electionGroup.get('startDate').hasError('required')){
+      return "start Date is Required"
+    }
+    else{
+      return ""
+    }
   }
 }

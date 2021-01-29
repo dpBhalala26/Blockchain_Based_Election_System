@@ -1,0 +1,81 @@
+<mat-card class="register-card">
+    <mat-card-header>
+        <mat-card-title> User Details </mat-card-title>
+    </mat-card-header>
+    <mat-card-content *ngIf="myFromGroup">
+        <form action="" method="post" [formGroup]="myFromGroup">
+            <table class="full-width">
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label> Account Status</mat-label>
+                            <input matInput name="status" id="status"
+                                [formControl]="myFromGroup.get('status')">
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>  username</mat-label>
+                            <input matInput name="uname" id="uname" placeholder="user123"
+                                [formControl]="myFromGroup.get('uname')">
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label> email</mat-label>
+                            <input matInput name="email" id="email" placeholder="user123@dp.in"
+                                [formControl]="myFromGroup.get('email')" >
+                            <mat-error *ngIf="myFromGroup.get('email').invalid">{{getEmailErrorMessage()}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>  Address</mat-label>
+                            <input matInput name="address" id="address"
+                                placeholder="Shaitan gali, Katra Mahel, Andher Nagar, Shamsaan Ghat ke Samne"
+                                [formControl]="myFromGroup.get('address')">
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Role</mat-label>
+
+                            <input matInput name="roleName" id="roleName"
+                                [formControl]="myFromGroup.get('roleName')">
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label> Status Issue Message</mat-label>
+                            <input matInput name="statusIssueMessage" id="statusIssueMessage"
+                            [formControl] ="myFromGroup.get('statusIssueMessage')" >
+                        </mat-form-field>
+                        <button mat-raised-button color="warn" (click)="requestModification()" class="full-width"
+                            tabindex="0">Modification Required</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-error *ngIf='err'> {{ err | async }} </mat-error>
+                        <button mat-raised-button color="primary" (click)="verifyUser()" class="full-width"
+                            tabindex="0">Verify</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <br><br>
+    </mat-card-content>
+</mat-card>

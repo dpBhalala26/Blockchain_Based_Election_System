@@ -7,12 +7,12 @@ import { ElectionsComponent } from './elections/elections.component';
 import { ManageVotersComponent } from './manage-voters/manage-voters.component';
 import { SharedModule } from '../shared/shared.module';
 import { VoterDetailsComponent } from './voter-details/voter-details.component';
-import { ElectionDetailsComponent } from './election-details/election-details.component';
 import { SetElectionComponent } from './set-election/set-election.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ViewElectionComponent } from './view-election/view-election.component';
 
 @NgModule({
-  declarations: [HomeComponent, ElectionsComponent, ManageVotersComponent, VoterDetailsComponent, ElectionDetailsComponent,SetElectionComponent],
+  declarations: [HomeComponent, ElectionsComponent, ManageVotersComponent, VoterDetailsComponent,SetElectionComponent, ViewElectionComponent],
   
   imports: [
     CommonModule,
