@@ -6,6 +6,12 @@ function generateToken( user ){
     return jwt.sign(payload, config.jwtSecretKey);
 }
 
+function decodeToken( token ){
+    const payload = jwt.decode(token)
+    return payload
+}
+
 module.exports = {
-    generateToken
+    generateToken,
+    decodeToken
 };

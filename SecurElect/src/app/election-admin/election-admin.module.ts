@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 
 import { ElectionAdminRoutingModule } from './election-admin-routing.module';
 import { HomeComponent } from './home/home.component';
-import { ElectionComponent } from './election/election.component';
+import { ElectionsComponent } from './elections/elections.component';
 import { ManageVotersComponent } from './manage-voters/manage-voters.component';
 import { SharedModule } from '../shared/shared.module';
+import { VoterDetailsComponent } from './voter-details/voter-details.component';
 import { SetElectionComponent } from './set-election/set-election.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { ViewElectionComponent } from './view-election/view-election.component';
 
 @NgModule({
-  declarations: [HomeComponent, ElectionComponent, ManageVotersComponent, SetElectionComponent],
+  declarations: [HomeComponent, ElectionsComponent, ManageVotersComponent, VoterDetailsComponent,SetElectionComponent, ViewElectionComponent],
+  
   imports: [
     CommonModule,
     ElectionAdminRoutingModule,

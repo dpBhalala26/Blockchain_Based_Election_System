@@ -7,10 +7,11 @@ import { ElectionAdminHeaderComponent } from './election-admin-header/election-a
 import { AppComponent } from './root/app.component';
 import { VoterHeaderComponent } from './voter-header/voter-header.component';
 import { AnonymousHeaderComponent } from './anonymous-header/anonymous-header.component';
+import { SystemAdminHeaderComponent } from './system-admin-header/system-admin-header.component';
 
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent,  ElectionAdminHeaderComponent, VoterHeaderComponent, AnonymousHeaderComponent],
+  declarations: [AppComponent, HeaderComponent,  ElectionAdminHeaderComponent, VoterHeaderComponent, AnonymousHeaderComponent, SystemAdminHeaderComponent],
   imports: [
     CommonModule,
     BlocksRoutingModule,

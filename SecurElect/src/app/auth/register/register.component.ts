@@ -15,16 +15,16 @@ import { LogService } from 'src/app/core/utils/log.service';
 
 export class RegisterComponent implements OnInit {
   
-  uname: String;
-  email: String;
-  pwd: String;
-  confpwd: String;
-  address: String;
-  roleName: string;
-  roleRefKey: string;
+  // uname: String;
+  // email: String;
+  // pwd: String;
+  // confpwd: String;
+  // address: String;
+  // roleName: string;
+  // roleRefKey: string;
   err: BehaviorSubject<string>;
   roleBoxVisible:boolean = false;
-  roleList:Array<string> = ['voter','admin'];
+  roleList:Array<string> = ['voter','election-admin'];
   userGroup = new FormGroup({
     uname: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
 
   toggleRoleBox(){
     console.log(this.userGroup.get("roleName").value+"hello")
-    if(this.userGroup.get("roleName").value == "admin"){
+    if(this.userGroup.get("roleName").value == "election-admin"){
       this.roleBoxVisible=true;
     }else{
       this.roleBoxVisible=false;

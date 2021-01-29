@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Voter } from 'src/app/core/voter';
 
-export interface Voter{
-  uname: String;
-    email: String;
-    address: String;
-    publicKey:string;
-    status:string;
-}
+
 
 const VOTERS_DATA: Voter[] = [
-  {uname: 'Voter1',email:"demo1@demo.com",address:"demo address",status:"pending", publicKey:""},  
-  {uname: 'Voter2',email:"demo2@demo.com",address:"demo address",status:"pending", publicKey:""},  
-  {uname: 'Voter3',email:"demo3@demo.com",address:"demo address",status:"pending", publicKey:""},  
+  {id:"1",sr_num: 1,uname:"voter1",email:"voter1@demo.com",address:"demo1",publicKey:"",status:"pending",statusIssueMessage:""},  
+  {id:"2",sr_num: 2,uname:"voter2",email:"voter2@demo.com",address:"demo2",publicKey:"",status:"pending",statusIssueMessage:""},  
 ];
 
 @Component({
@@ -21,8 +15,8 @@ const VOTERS_DATA: Voter[] = [
 })
 export class ManageVotersComponent implements OnInit {
 
-  displayedColumns: string[] = ['uname', 'email', 'address', 'status','publicKey'];
-  electionDataSource:any = VOTERS_DATA;
+  displayedColumns: string[] = ['sr_num', 'uname', 'email', 'address','status','action'];
+  voterDataSource:any = VOTERS_DATA;
 
   constructor() { }
 

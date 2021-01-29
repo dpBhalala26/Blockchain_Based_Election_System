@@ -1,33 +1,46 @@
-<p>election works!</p>
-<table mat-table [dataSource]="electionDataSource" class="mat-elevation-z8">
+
+<table mat-table [dataSource]="voterDataSource" class="mat-elevation-z8">
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
   
-    <!-- Position Column -->
-    <ng-container matColumnDef="position">
+    <!-- Serial Number Column -->
+    <ng-container matColumnDef="sr_num">
       <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+      <td mat-cell *matCellDef="let voter"> {{voter.sr_num}} </td>
     </ng-container>
   
     <!-- Name Column -->
-    <ng-container matColumnDef="name">
+    <ng-container matColumnDef="uname">
       <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      <td mat-cell *matCellDef="let voter"> {{voter.uname}} </td>
     </ng-container>
   
-    <!-- Weight Column -->
-    <ng-container matColumnDef="start">
-      <th mat-header-cell *matHeaderCellDef> Start </th>
-      <td mat-cell *matCellDef="let element"> {{element.start}} </td>
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let voter"> {{voter.email}} </td>
     </ng-container>
   
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="end">
-      <th mat-header-cell *matHeaderCellDef> End </th>
-      <td mat-cell *matCellDef="let element"> {{element.end}} </td>
+    <!-- Address Column -->
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef> Address </th>
+      <td mat-cell *matCellDef="let voter"> {{voter.address}} </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let voter"> {{voter.status}} </td>
     </ng-container>
   
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let voter"> <button mat-menu-item [routerLink]="['/election-admin/voter-details',voter.id]" >
+        View
+      </button></td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
