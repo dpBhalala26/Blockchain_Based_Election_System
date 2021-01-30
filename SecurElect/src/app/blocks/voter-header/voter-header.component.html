@@ -1,4 +1,4 @@
-<div style="height: 100vh" >
+<div style="height: 100vh" *ngIf="user && user.roles[0].name == 'voter'">
     <mat-toolbar color="primary" >
       <mat-toolbar-row *ngIf="user">
           <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>

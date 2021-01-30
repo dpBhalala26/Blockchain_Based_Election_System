@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Voter } from 'src/app/core/voter';
+
+
+
+const VOTERS_DATA: Voter[] = [
+  {id:"1",sr_num: 1,uname:"voter1",email:"voter1@demo.com",address:"demo1",publicKey:"",status:"pending",statusIssueMessage:""},  
+  {id:"2",sr_num: 2,uname:"voter2",email:"voter2@demo.com",address:"demo2",publicKey:"",status:"pending",statusIssueMessage:""},  
+];
 
 @Component({
   selector: 'rd-manage-voters',
@@ -6,6 +14,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./manage-voters.component.scss']
 })
 export class ManageVotersComponent implements OnInit {
+
+  displayedColumns: string[] = ['sr_num', 'uname', 'email', 'address','status','action'];
+  voterDataSource:any = VOTERS_DATA;
 
   constructor() { }
 
