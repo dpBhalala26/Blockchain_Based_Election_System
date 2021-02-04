@@ -1,2 +1,43 @@
-<p>election-details works!</p>
-{{election_id}}
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-card fxFlex="500px" fxFlex.xs="100%">
+        <mat-card-title>Election Details </mat-card-title>
+        <mat-card-content>
+            
+          <div fxLayout="column wrap" fxLayoutGap="40px">
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Id</strong></div>
+                <div fxFlex>{{election_id}}</div>
+              </div>
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Title:</strong></div>
+              <div fxFlex>{{election?.title}}</div>
+            </div>
+      
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Description:</strong></div>
+                <div fxFlex>{{election?.description}}</div>
+              </div>
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Start Date:</strong></div>
+              <div fxFlex>{{election?.startDate | date}}</div>
+            </div>
+      
+            <div fxLayout="row wrap" fxFlex >
+              <div fxFlex><strong>End Date:</strong></div>
+              <div fxFlex >{{election?.endDate | date}}</div>
+            </div>
+            
+              <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>status:</strong></div>
+                <div fxFlex class="advanced-color">{{election?.status}}</div>
+              </div>
+            
+          </div>
+          <button mat-raised-button color="warn" (click)="deleteElection()" >
+            Delete
+          </button>
+        </mat-card-content>
+        
+      </mat-card>
+</section>

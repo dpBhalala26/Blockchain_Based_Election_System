@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Election } from 'src/app/core/election';
 
-const ELECTION_DATA: Election[] = [
-  {sr_no: 1, name: 'Tech Lead', start: new Date("2021-01-22"), end: new Date("2021-01-23")},
-];
+// const ELECTION_DATA: Election[] = [
+//   {sr_no: 1, name: 'Tech Lead', start: new Date("2021-01-22"), end: new Date("2021-01-23")},
+// ];
 
 @Component({
   selector: 'rd-elections-joined',
@@ -13,7 +13,7 @@ const ELECTION_DATA: Election[] = [
 export class ElectionsJoinedComponent implements OnInit {
 
   displayedColumns: string[] = ['sr_no', 'name', 'start', 'end'];
-  electionDataSource:any = ELECTION_DATA;
+  electionDataSource:any ;   //= ELECTION_DATA;
 
   constructor() { }
 

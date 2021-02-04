@@ -1,6 +1,11 @@
 export interface Election { 
-    sr_no: number;
-    name: string;
-    start: Date;
-    end: Date;
+    id:string
+    title:string;
+    description: string;
+    startDate: Date;
+    endDate: Date;
+    status:string;
+    createdBy:string;
+    voters:string[];
+    candidates:string[];
   }

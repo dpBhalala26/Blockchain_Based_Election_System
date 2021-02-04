@@ -5,6 +5,7 @@ import { SharedRoutingModule } from './shared-routing.module';
 import { NgMaterialModule } from './ng-material-module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ElectionDetailsComponent } from './election-details/election-details.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import { ElectionDetailsComponent } from './election-details/election-details.co
   imports: [
     CommonModule,
     SharedRoutingModule,
-    NgMaterialModule
+    NgMaterialModule,
+    FlexLayoutModule
   ],
   exports:[
     NgMaterialModule,

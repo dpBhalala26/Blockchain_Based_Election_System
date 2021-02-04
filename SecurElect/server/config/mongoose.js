@@ -5,7 +5,7 @@ const config = require('../config/config');
 
 const mongoUri = config.mongo.mongo_uri;
 
-mongoose.connect( mongoUri, { keepAlive: 1, useNewUriParser: true, useFindandModify: false } );
+mongoose.connect( mongoUri,{ useNewUrlParser: true , keepAlive: 1,useUnifiedTopology: true,useCreateIndex: true,} );
 
 const mngdb = mongoose.connection;
 
