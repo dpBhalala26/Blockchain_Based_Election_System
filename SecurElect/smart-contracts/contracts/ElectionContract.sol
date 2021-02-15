@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 /// @title SecurElect Election Smart Contract
 contract ElectionContract {
     enum electionStatus {beforeStart, started, ended}
-    electionStatus currentElectionStatus;
+    electionStatus public currentElectionStatus;
 
     address public admin;
 
@@ -19,7 +19,7 @@ contract ElectionContract {
     // Array of candidates.
     // Array size is dynamic so that we can use the contract for different elcetions
     Candidate[] public candidates;
-    uint256 winningCandidateId;
+    uint256[] public winningCandidateIDs;
 
     // Structure definition of the voter
     struct Voter {
@@ -30,6 +30,21 @@ contract ElectionContract {
     // Mapping of addresses(public keys) and voters.
     // We can access elements of 'Voter' structure by the address of the voter
     mapping(address => Voter) public voters;
+
+    // event to be emitted after successful initialization
+    event contractInitialized(address indexed _from);
+
+    // voter made eligible events
+    event voterMadeEligible(address indexed _from, address voterAddress);
+
+    // voted event when vote is casted successfully
+    event votedEvent(address indexed _from);
+
+    // Event for initialized voting process
+    event votingProcessIntialized(address indexed _from);
+
+    // Event for finalized voting process
+    event votingProcessFinalized(address indexed _from);
 
     // constructor of election contract
     // candidates names are taken dynamically so that we can use the contract for different elcetions
@@ -52,6 +67,8 @@ contract ElectionContract {
                 })
             );
         }
+        // Construction Successful.
+        emit contractInitialized(msg.sender);
     }
 
     // Making the voter eligible to vote for the election
@@ -77,6 +94,9 @@ contract ElectionContract {
             "INFO : This person is already eligible to vote."
         );
         voters[voterAddress].eligible = true; // Making voter Eligible to vote
+    
+        // successfully made voter eligible
+        emit voterMadeEligible(msg.sender, voterAddress);
     }
 
     // Voting function
@@ -105,6 +125,8 @@ contract ElectionContract {
             }
         }
 
+        emit votedEvent(msg.sender); // Voted successfully event
+
         require(
             false,
             "ERROR : Invalid candidate Id entered while voting in the election"
@@ -112,10 +134,10 @@ contract ElectionContract {
     }
 
     // returning the candidate details of the winner.
-    function getWinnerCandidate()
+    function getWinnerCandidateIDs()
         public
         view
-        returns (Candidate memory winnerCandidate)
+        returns (uint256[] memory winnerCandidateIDs)
     {
         // Winner candidate can be get only when the election is ended.
         require(
@@ -123,7 +145,7 @@ contract ElectionContract {
             "ERROR : Cannot get winner candidate details before the election is ended."
         );
 
-        winnerCandidate = candidates[winningCandidateId];
+        winnerCandidateIDs = winningCandidateIDs;
     }
 
     // changing the status of election from 'beforeStart' to 'started'
@@ -133,7 +155,15 @@ contract ElectionContract {
             msg.sender == admin,
             "ERROR : Admin is allowed to initiate the voting process"
         );
+
+        // Election must not be ended.
+        require(
+            currentElectionStatus != electionStatus.ended,
+            "ERROR : The Elcetion can not be started again after it is ended."
+        );
         currentElectionStatus = electionStatus.started;
+
+        emit votingProcessIntialized(msg.sender);  // successfully initialized voting process
     }
 
     // changing the status of election status from 'started' to 'ended'
@@ -147,18 +177,18 @@ contract ElectionContract {
 
         require(
             currentElectionStatus == electionStatus.started,
-            "ERROR : Election is not running."
+            "ERROR : Election has not started yet."
         );
         currentElectionStatus = electionStatus.ended;
 
-        uint256 maxVoteCandIndex; // to track the index of maximum voted candidate
+        //uint256 maxVoteCandIndex; // to track the index of maximum voted candidate
         uint256 maxVoteCount = 0; // to keep track of maximum votes so far
 
         // Finding the maximum votes and its candidate index
         for (uint256 k = 0; k < candidates.length; k++) {
             if (candidates[k].voteCount > maxVoteCount) {
                 maxVoteCount = candidates[k].voteCount;
-                maxVoteCandIndex = k;
+                //maxVoteCandIndex = k;
             }
         }
 
@@ -167,6 +197,16 @@ contract ElectionContract {
             "ERROR : No voter has voted yet in the election so far."
         );
 
-        winningCandidateId = maxVoteCandIndex;
+        //winningCandidateId = maxVoteCandIndex;
+
+        // Loop is used to handle "TIE" condition between multiple candidates.
+        // Adding candidate IDs to the winning list.
+        for (uint256 l = 0; l < candidates.length; l++) {
+            if (candidates[l].voteCount == maxVoteCount) {
+                winningCandidateIDs.push(candidates[l].candId);
+            }
+        }
+
+        emit votingProcessFinalized(msg.sender);  // successfully finalized voting process
     }
 }
