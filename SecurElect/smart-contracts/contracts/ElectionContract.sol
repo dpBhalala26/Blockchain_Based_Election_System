@@ -31,6 +31,21 @@ contract ElectionContract {
     // We can access elements of 'Voter' structure by the address of the voter
     mapping(address => Voter) public voters;
 
+    // event to be emitted after successful initialization
+    event contractInitialized(address indexed _from);
+
+    // voter made eligible events
+    event voterMadeEligible(address indexed _from, address voterAddress);
+
+    // voted event when vote is casted successfully
+    event votedEvent(address indexed _from);
+
+    // Event for initialized voting process
+    event votingProcessIntialized(address indexed _from);
+
+    // Event for finalized voting process
+    event votingProcessFinalized(address indexed _from);
+
     // constructor of election contract
     // candidates names are taken dynamically so that we can use the contract for different elcetions
     constructor(uint256[] memory candidateIds, string[] memory candidateNames) {
@@ -52,6 +67,8 @@ contract ElectionContract {
                 })
             );
         }
+        // Construction Successful.
+        emit contractInitialized(msg.sender);
     }
 
     // Making the voter eligible to vote for the election
@@ -77,6 +94,9 @@ contract ElectionContract {
             "INFO : This person is already eligible to vote."
         );
         voters[voterAddress].eligible = true; // Making voter Eligible to vote
+    
+        // successfully made voter eligible
+        emit voterMadeEligible(msg.sender, voterAddress);
     }
 
     // Voting function
@@ -104,6 +124,8 @@ contract ElectionContract {
                 return;
             }
         }
+
+        emit votedEvent(msg.sender); // Voted successfully event
 
         require(
             false,
@@ -140,6 +162,8 @@ contract ElectionContract {
             "ERROR : The Elcetion can not be started again after it is ended."
         );
         currentElectionStatus = electionStatus.started;
+
+        emit votingProcessIntialized(msg.sender);  // successfully initialized voting process
     }
 
     // changing the status of election status from 'started' to 'ended'
@@ -182,5 +206,7 @@ contract ElectionContract {
                 winningCandidateIDs.push(candidates[l].candId);
             }
         }
+
+        emit votingProcessFinalized(msg.sender);  // successfully finalized voting process
     }
 }
