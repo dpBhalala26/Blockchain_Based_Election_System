@@ -1,6 +1,6 @@
-<mat-card class="register-card">
+<mat-card class="register-card" >
 <mat-card-header>
-    <mat-card-title> Register </mat-card-title>
+    <mat-card-title> Election </mat-card-title>
 </mat-card-header>
 <mat-card-content>
     <form action="" method="post" [formGroup]="electionGroup">
@@ -8,9 +8,18 @@
             <tr>
                 <td>
                     <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Enter election Name</mat-label>
-                        <input matInput name="name" id="name" placeholder="Project Leade"
-                            [formControl]="electionGroup.get('name')" required>
+                        <mat-label>Enter election Title</mat-label>
+                        <input matInput name="title" id="title" placeholder="Project Leade"
+                            [formControl]="electionGroup.get('title')" required>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Enter Description</mat-label>
+                        <input matInput name="description" id="description" placeholder="The aim of this election is ....."
+                            [formControl]="electionGroup.get('description')" required>
                     </mat-form-field>
                 </td>
             </tr>
@@ -36,7 +45,7 @@
                     </mat-form-field>
                 </td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <td>
 
                     <mat-form-field appearance="outline" class="full-width">
@@ -46,7 +55,7 @@
                         <mat-error *ngIf="electionGroup.get('description').invalid">{{getdescriptionErrorMessage()}}</mat-error>
                     </mat-form-field>
                 </td>
-            </tr>
+            </tr> -->
             <tr>
             <td>
                 <mat-error *ngIf='err'> {{ err | async }} </mat-error>

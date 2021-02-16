@@ -11,6 +11,7 @@ export class ViewElectionComponent implements OnInit {
   constructor(private route:ActivatedRoute) { }
   election_id:string;
   ngOnInit(): void {
+    console.log("this.election_id");
     this.route.paramMap.subscribe( params => {
       this.election_id = params.get("election_id");
       console.log(this.election_id);
