@@ -1,1 +1,45 @@
-<p>manage-elections-joined works!</p>
+<p>elections-joined works!</p>
+<div class="button-top-right">
+    <button mat-raised-button color="accent"  [routerLink]="['/election-admin/set-election']">
+      
+    </button>
+  </div>
+  <table mat-table [dataSource]="electionDataSource" class="mat-elevation-z8">
+    <!-- Position Column -->
+    <ng-container matColumnDef="Id">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let election">{{ election._id }}</td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let election">{{ election.title }}</td>
+    </ng-container>
+  
+    <!-- Weight Column -->
+    <ng-container matColumnDef="start">
+      <th mat-header-cell *matHeaderCellDef>Start</th>
+      <td mat-cell *matCellDef="let election">{{ election.startDate | date }}</td>
+    </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="end">
+      <th mat-header-cell *matHeaderCellDef>End</th>
+      <td mat-cell *matCellDef="let election">{{ election.endDate | date }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let election">
+        <button mat-raised-button color="primary"
+          [routerLink]="['/voter/view-election', election._id]"
+        >
+          View
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  

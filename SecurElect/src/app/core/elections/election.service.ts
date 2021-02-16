@@ -14,6 +14,9 @@ export class ElectionService {
   getAllElections(): Observable<Election[]>{
     return this.$http.get(this.baseApiUrl+"?filter=byElectionAdmin") as Observable<Election[]>;
   }
+  getAllElectionsJoined(): Observable<Election[]>{
+    return this.$http.get(this.baseApiUrl+"?filter=byVoter") as Observable<Election[]>;
+  }
   getElection(electionId:string): Observable<Election>{
     return this.$http.get(this.baseApiUrl+"/"+electionId) as Observable<Election>;
   }
