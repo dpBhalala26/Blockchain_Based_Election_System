@@ -210,3 +210,7 @@ contract ElectionContract {
         emit votingProcessFinalized(msg.sender);  // successfully finalized voting process
     }
 }
+
+// Give proper names to election status messages
+// Gouard for candidate array getter.
+// Make candidateId string from uint
