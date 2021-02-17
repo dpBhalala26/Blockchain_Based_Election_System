@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 
 /// @title SecurElect Election Smart Contract
 contract ElectionContract {
-    enum electionStatus {beforeStart, started, ended}
+    enum electionStatus {readyForVoting, votingStarted, votingEnded}
     electionStatus public currentElectionStatus;
 
     address public admin;
@@ -49,7 +49,7 @@ contract ElectionContract {
     // constructor of election contract
     // candidates names are taken dynamically so that we can use the contract for different elcetions
     constructor(uint256[] memory candidateIds, string[] memory candidateNames) {
-        currentElectionStatus = electionStatus.beforeStart; // The has not started while generating the contract
+        currentElectionStatus = electionStatus.readyForVoting; // The has not started while generating the contract
         admin = msg.sender;
         voters[admin].eligible = true; // Admin can also vote in the election
 
@@ -75,7 +75,7 @@ contract ElectionContract {
     function makeVoterEligible(address voterAddress) public {
         // Admin can make voter eligible only before the election is started
         require(
-            currentElectionStatus == electionStatus.beforeStart,
+            currentElectionStatus == electionStatus.readyForVoting,
             "ERROR : Cannot make a voter eligible after the election has started."
         );
 
@@ -103,7 +103,7 @@ contract ElectionContract {
     function vote(uint256 candidateId) public {
         // Voter can only vote after the elction has started and before ended
         require(
-            currentElectionStatus == electionStatus.started,
+            currentElectionStatus == electionStatus.votingStarted,
             "ERROR : Cannot vote before or after the election"
         );
 
@@ -141,14 +141,14 @@ contract ElectionContract {
     {
         // Winner candidate can be get only when the election is ended.
         require(
-            currentElectionStatus == electionStatus.ended,
+            currentElectionStatus == electionStatus.votingEnded,
             "ERROR : Cannot get winner candidate details before the election is ended."
         );
 
         winnerCandidateIDs = winningCandidateIDs;
     }
 
-    // changing the status of election from 'beforeStart' to 'started'
+    // changing the status of election from 'readyForVoting' to 'votingStarted'
     function initializeVotingProcess() public {
         // Message sender must be admin because only admin can initiate the voting process
         require(
@@ -158,15 +158,15 @@ contract ElectionContract {
 
         // Election must not be ended.
         require(
-            currentElectionStatus != electionStatus.ended,
+            currentElectionStatus != electionStatus.votingEnded,
             "ERROR : The Elcetion can not be started again after it is ended."
         );
-        currentElectionStatus = electionStatus.started;
+        currentElectionStatus = electionStatus.votingStarted;
 
         emit votingProcessIntialized(msg.sender);  // successfully initialized voting process
     }
 
-    // changing the status of election status from 'started' to 'ended'
+    // changing the status of election status from 'votingStarted' to 'votingEnded'
     // Comparing the voteCount of canidates and setting the winner candidateId
     function finalizeVotingProcess() public {
         // Message sender must be admin because only admin can finalize the voting process
@@ -176,10 +176,10 @@ contract ElectionContract {
         );
 
         require(
-            currentElectionStatus == electionStatus.started,
+            currentElectionStatus == electionStatus.votingStarted,
             "ERROR : Election has not started yet."
         );
-        currentElectionStatus = electionStatus.ended;
+        currentElectionStatus = electionStatus.votingEnded;
 
         //uint256 maxVoteCandIndex; // to track the index of maximum voted candidate
         uint256 maxVoteCount = 0; // to keep track of maximum votes so far
@@ -211,6 +211,5 @@ contract ElectionContract {
     }
 }
 
-// Give proper names to election status messages
 // Gouard for candidate array getter.
 // Make candidateId string from uint
