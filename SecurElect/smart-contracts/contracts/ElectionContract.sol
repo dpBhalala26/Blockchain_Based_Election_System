@@ -11,15 +11,16 @@ contract ElectionContract {
 
     // Structure definition of the candidate
     struct Candidate {
-        string candId; // string Id of the candidate
+        string candId;
         string name; // name of the candidate
         uint256 voteCount; // number of votes candidate has
     }
 
     // Array of candidates.
     // Array size is dynamic so that we can use the contract for different elcetions
-    Candidate[] public candidates;
-    string[] public winningCandidateIDs;
+    Candidate[] private candidates;
+    // Array of winner candidates
+    Candidate[] private winningCandidates;
 
     // Structure definition of the voter
     struct Voter {
@@ -133,11 +134,26 @@ contract ElectionContract {
         ); // Program reaches here only when invalid ID is entered.
     }
 
-    // returning the candidate details of the winner.
-    function getWinnerCandidateIDs()
+    // returning the candidate details.
+    function getCandidateDetails()
         public
         view
-        returns (string[] memory winnerCandidateIDs)
+        returns (Candidate[] memory candidateDetails)
+    {
+        // Winner candidate can be get only when the election is ended.
+        require(
+            currentElectionStatus == electionStatus.votingEnded,
+            "ERROR : Cannot get candidate details before the election is ended."
+        );
+
+        candidateDetails = candidates;
+    }
+
+    // returning the candidate details of the winner.
+    function getWinnerCandidateDetails()
+        public
+        view
+        returns (Candidate[] memory winnerCandidates)
     {
         // Winner candidate can be get only when the election is ended.
         require(
@@ -145,7 +161,7 @@ contract ElectionContract {
             "ERROR : Cannot get winner candidate details before the election is ended."
         );
 
-        winnerCandidateIDs = winningCandidateIDs;
+        winnerCandidates = winningCandidates;
     }
 
     // changing the status of election from 'readyForVoting' to 'votingStarted'
@@ -203,7 +219,7 @@ contract ElectionContract {
         // Adding candidate IDs to the winning list.
         for (uint256 l = 0; l < candidates.length; l++) {
             if (candidates[l].voteCount == maxVoteCount) {
-                winningCandidateIDs.push(candidates[l].candId);
+                winningCandidates.push(candidates[l]);
             }
         }
 
@@ -212,3 +228,4 @@ contract ElectionContract {
 }
 
 // Gouard for candidate array getter.
+// Make candidateId string from uint
