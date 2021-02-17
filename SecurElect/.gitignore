@@ -46,4 +46,4 @@ testem.log
 Thumbs.db
 
 # Smart Contract build Files
-/smart-contracts/build
+/build
