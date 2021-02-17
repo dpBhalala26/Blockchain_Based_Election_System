@@ -89,7 +89,7 @@ contract ElectionContract {
         //     !voters[voterAddress].voted,
         //     "ERROR : This voter has voted in this election."
         // );
-        // Redundancy commented
+        // above condition is not needed to check, hence commented in order to avoid confusion
         require(
             !voters[voterAddress].eligible,
             "INFO : This person is already eligible to vote."
@@ -197,14 +197,12 @@ contract ElectionContract {
         );
         currentElectionStatus = electionStatus.votingEnded;
 
-        //uint256 maxVoteCandIndex; // to track the index of maximum voted candidate
         uint256 maxVoteCount = 0; // to keep track of maximum votes so far
 
         // Finding the maximum votes and its candidate index
         for (uint256 k = 0; k < candidates.length; k++) {
             if (candidates[k].voteCount > maxVoteCount) {
                 maxVoteCount = candidates[k].voteCount;
-                //maxVoteCandIndex = k;
             }
         }
 
@@ -213,7 +211,6 @@ contract ElectionContract {
             "ERROR : No voter has voted yet in the election so far."
         );
 
-        //winningCandidateId = maxVoteCandIndex;
 
         // Loop is used to handle "TIE" condition between multiple candidates.
         // Adding candidate IDs to the winning list.
@@ -226,6 +223,3 @@ contract ElectionContract {
         emit votingProcessFinalized(msg.sender);  // successfully finalized voting process
     }
 }
-
-// Gouard for candidate array getter.
-// Make candidateId string from uint
