@@ -11,7 +11,7 @@ contract ElectionContract {
 
     // Structure definition of the candidate
     struct Candidate {
-        uint256 candId;
+        string candId; // string Id of the candidate
         string name; // name of the candidate
         uint256 voteCount; // number of votes candidate has
     }
@@ -19,7 +19,7 @@ contract ElectionContract {
     // Array of candidates.
     // Array size is dynamic so that we can use the contract for different elcetions
     Candidate[] public candidates;
-    uint256[] public winningCandidateIDs;
+    string[] public winningCandidateIDs;
 
     // Structure definition of the voter
     struct Voter {
@@ -48,7 +48,7 @@ contract ElectionContract {
 
     // constructor of election contract
     // candidates names are taken dynamically so that we can use the contract for different elcetions
-    constructor(uint256[] memory candidateIds, string[] memory candidateNames) {
+    constructor(string[] memory candidateIds, string[] memory candidateNames) {
         currentElectionStatus = electionStatus.readyForVoting; // The has not started while generating the contract
         admin = msg.sender;
         voters[admin].eligible = true; // Admin can also vote in the election
@@ -100,7 +100,7 @@ contract ElectionContract {
     }
 
     // Voting function
-    function vote(uint256 candidateId) public {
+    function vote(string memory candidateId) public {
         // Voter can only vote after the elction has started and before ended
         require(
             currentElectionStatus == electionStatus.votingStarted,
@@ -119,7 +119,7 @@ contract ElectionContract {
         voteSender.voted = true; // Making sure that one voter only votes once.
 
         for (uint256 j = 0; j < candidates.length; j++) {
-            if (candidateId == candidates[j].candId) {
+            if (keccak256(bytes(candidateId)) == keccak256(bytes(candidates[j].candId))) {
                 candidates[j].voteCount += 1;
                 return;
             }
@@ -137,7 +137,7 @@ contract ElectionContract {
     function getWinnerCandidateIDs()
         public
         view
-        returns (uint256[] memory winnerCandidateIDs)
+        returns (string[] memory winnerCandidateIDs)
     {
         // Winner candidate can be get only when the election is ended.
         require(
@@ -212,4 +212,3 @@ contract ElectionContract {
 }
 
 // Gouard for candidate array getter.
-// Make candidateId string from uint
