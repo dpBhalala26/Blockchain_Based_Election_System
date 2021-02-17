@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 
 /// @title SecurElect Election Smart Contract
 contract ElectionContract {
-    enum electionStatus {readyForVoting, votingStarted, votingEnded}
+    enum electionStatus {initialized, readyForVoting, votingStarted, votingEnded}
     electionStatus public currentElectionStatus;
 
     address public admin;
@@ -34,6 +34,9 @@ contract ElectionContract {
 
     // event to be emitted after successful initialization
     event contractInitialized(address indexed _from);
+    
+    // candidates are added for the election
+    event candidatesAdded(address indexed _from, string[] candidateIds, string[] candidateNames);
 
     // voter made eligible events
     event voterMadeEligible(address indexed _from, address voterAddress);
@@ -48,12 +51,24 @@ contract ElectionContract {
     event votingProcessFinalized(address indexed _from);
 
     // constructor of election contract
-    // candidates names are taken dynamically so that we can use the contract for different elcetions
-    constructor(string[] memory candidateIds, string[] memory candidateNames) {
-        currentElectionStatus = electionStatus.readyForVoting; // The has not started while generating the contract
+    constructor() {
         admin = msg.sender;
         voters[admin].eligible = true; // Admin can also vote in the election
-
+        
+        currentElectionStatus = electionStatus.initialized; // The contract is initialized.
+        
+        // Construction Successful.
+        emit contractInitialized(msg.sender);
+    }
+    
+    // candidates names are taken dynamically so that we can use the contract for different elcetions
+    function addCandidateForElection(string[] memory candidateIds, string[] memory candidateNames) public {
+        // Message sender must be admin because only admin can add the candidates for election
+        require(
+            msg.sender == admin,
+            "ERROR : Admin is allowed to add candidates for the election."
+        );
+        
         require(
             candidateIds.length == candidateNames.length,
             "ERROR : Arguments Invalid : Ids and Names arrays are not of same length"
@@ -68,8 +83,10 @@ contract ElectionContract {
                 })
             );
         }
-        // Construction Successful.
-        emit contractInitialized(msg.sender);
+        currentElectionStatus = electionStatus.readyForVoting; // The voting process can be started now.
+        
+        // successfully added candidates.
+        emit candidatesAdded(msg.sender, candidateIds, candidateNames);
     }
 
     // Making the voter eligible to vote for the election
