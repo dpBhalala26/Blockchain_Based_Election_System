@@ -46,5 +46,4 @@ testem.log
 Thumbs.db
 
 # Smart Contract build Files
-Migrations.json
-ElectionContract.json
+/smart-contracts/build
