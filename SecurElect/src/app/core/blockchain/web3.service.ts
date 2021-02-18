@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 declare let require: any;
 declare let window: any;
@@ -52,6 +53,7 @@ export class Web3Service {
       console.log('after setting httpprovider: web3 is ' + this.web3);
     }
   }
+
   public async convertArtifactsToContract(artifacts) {
     console.log(
       'In web3 service: in convertArtifactsToContract function ' + artifacts
@@ -66,5 +68,15 @@ export class Web3Service {
     absContract.setProvider(this.web3.currentProvider);
     console.log('abs contract is :' + absContract);
     return absContract;
+  }
+
+  public async getAccountAddress(){
+    var account:string;
+    this.web3.eth.getCoinbase( function(err, acc) {
+      if (err === null){
+        account = acc;
+      }
+    } );
+    return account;
   }
 }
