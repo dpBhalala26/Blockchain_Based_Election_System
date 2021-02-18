@@ -26,11 +26,23 @@ const electionSchema = new mongoose.Schema({
         required: true
     },
     voters:[{
-        id:String
+        id:String,
+        publicAddress:String
     }],
     candidates:[{
-        id: String
+        id: String,
+        name:String
     }],
+    deploymentPost:{
+        type: String
+    },
+    deploymentLocation:{
+        type: String
+    },
+    contractMnemonics:{
+        type: String
+    },
+    
     versionKey: false
 });
 module.exports = mongoose.model('Election', electionSchema );

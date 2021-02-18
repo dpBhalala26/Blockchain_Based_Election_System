@@ -1,0 +1,21 @@
+{
+  "response": {
+    "_id": "6029366a10d2612bbcfee12f",
+    "id": "6029366a10d2612bbcfee12f",
+    "title": "Team Leader",
+    "description": "this is for upcoming project.....",
+    "startDate": "2021-02-18T09:10:06.573Z",
+    "endDate": "2021-02-19T14:40:06.573",
+    "status": "upcomming",
+    "createdBy": "60056f1601b2b41e28efa187",
+    "voters": [
+      { "id": "1", "publicAddress": "1" },
+      { "id": "2", "publicAddress": "2" }
+    ],
+    "candidates": [{ "id": "1", "name": "1" }],
+    "deploymentPost": "",
+    "deploymentLocation": "",
+    "contractMnemonics": "",
+    "__v": 0
+  }
+}

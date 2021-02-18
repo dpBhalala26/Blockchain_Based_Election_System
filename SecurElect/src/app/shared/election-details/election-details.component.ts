@@ -16,7 +16,7 @@ export class ElectionDetailsComponent implements OnInit {
   constructor(private electionService:ElectionService,private snakeBar: MatSnackBar,private router:Router) { }
 
   ngOnInit(): void {
-    this.electionService.getElection(this.election_id).subscribe(
+    this.electionService.getElectionForTesting(this.election_id).subscribe(
       (data)=>{
         console.log(data);
         this.election = data["response"]
