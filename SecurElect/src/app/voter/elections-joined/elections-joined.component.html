@@ -1,10 +1,12 @@
-<p>elections-joined works!</p>
-<div class="button-top-right">
-    <button mat-raised-button color="accent"  [routerLink]="['/election-admin/set-election']">
-      
-    </button>
-  </div>
-  <table mat-table [dataSource]="electionDataSource" class="mat-elevation-z8">
+<div class="button-top-right">  
+  <input matInput class="small-gap" name="electionIdToJoin" id="electionIdToJoin" [(ngModel)]="electionIdToJoin">    
+  
+  <button mat-raised-button color="accent"  (click)="joinElection()">
+      Join
+  </button>
+</div>
+
+  <table mat-table [dataSource]="electionDataSource$ | async" class="mat-elevation-z8">
     <!-- Position Column -->
     <ng-container matColumnDef="Id">
       <th mat-header-cell *matHeaderCellDef>No.</th>
@@ -42,4 +44,3 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  

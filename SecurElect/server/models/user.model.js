@@ -23,6 +23,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    publicKeyAddress:{
+        type: String
+    },
     publicKey:{
         type: String
     },

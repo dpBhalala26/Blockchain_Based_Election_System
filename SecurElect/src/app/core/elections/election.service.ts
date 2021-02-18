@@ -1,6 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { error } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { Election } from '../election';
 
@@ -9,22 +11,87 @@ import { Election } from '../election';
 })
 export class ElectionService {
 
+  private electionsDataStore = new BehaviorSubject<Election[]>(null);
+
+  get elections() {
+    return this.electionsDataStore.asObservable();
+  }
+
   constructor(private $http: HttpClient,private authservice:AuthService) { }
   private baseApiUrl = 'http://localhost:4250/api/election';
+
+
+  private addElection(election) {
+    //this.user$.next(user);
+    if (election) {
+      const newElections = { ...this.electionsDataStore.value, election};
+      this.electionsDataStore.next(newElections);
+    } else {
+      //this.electionsDataStore.next(null);
+      window.alert('Error in adding Election')
+    }
+  }
+
+  private removeElectionFromDataSource(electionIdToDelete) {
+    //this.user$.next(user);
+    if (electionIdToDelete) {
+      var currentVal = this.electionsDataStore.value.filter(function(election,index,arr){
+        return election.id!=electionIdToDelete
+      })
+      const newElections = { ...currentVal};
+      this.electionsDataStore.next(newElections);
+    } else {
+      throw Error("Unable to remove");
+      //window.alert('Error in adding Election')
+    }
+  }
+
+  getAllElectionsJoinedInBehaviourSubject(){
+    return this.$http.get(this.baseApiUrl+"?filter=byVoter").subscribe((response)=>{
+      this.electionsDataStore.next(response["response"]);
+    },
+    (err)=>{
+
+    });
+  }
+
   getAllElections(): Observable<Election[]>{
     return this.$http.get(this.baseApiUrl+"?filter=byElectionAdmin") as Observable<Election[]>;
   }
+
   getAllElectionsJoined(): Observable<Election[]>{
     return this.$http.get(this.baseApiUrl+"?filter=byVoter") as Observable<Election[]>;
   }
+
   getElection(electionId:string): Observable<Election>{
     return this.$http.get(this.baseApiUrl+"/"+electionId) as Observable<Election>;
   }
   setElection(election): Observable<Election>{
     return this.$http.post(this.baseApiUrl,election) as Observable<Election>;
   }
-  deleteElection(electionId): Observable<Election>{
-    return this.$http.delete(this.baseApiUrl+"/"+electionId) as Observable<Election>;
+  updateElection(election): Observable<Election>{
+    return this.$http.put(this.baseApiUrl,election) as Observable<Election>;
+  }
+  deleteElection(electionId): Observable<any>{
+    return this.$http.delete(this.baseApiUrl+"/"+electionId) as Observable<any>;
+    //return (this.$http.delete(this.baseApiUrl+"/"+electionId) as Observable<Election>).pipe();
+  }
+  joinElection(electionId:string,voterId:string){
+    return this.$http.post(this.baseApiUrl+"/join-election",{electionId:electionId,voterId:voterId}).subscribe((response)=>{
+      this.addElection(response["response"]);
+    },
+    (err)=>{
+      console.log("error in joining Election");
+      throw error("Error while joining Election, Please Check Internet connection");
+    });
+  }
+  
+  changeElectionStatus(electionId,newStatus): Observable<Election>{
+    return this.$http.post(this.baseApiUrl+"change-election-status",{"electionId":electionId,"status":newStatus}) as Observable<Election>;
   }
 
+  /*Development Infrastructure */
+  getElectionForTesting(electionId:string): Observable<Election>{
+    return this.$http.get("assets/election.json").pipe(delay(1250)) as Observable<Election>;
+  }
 }

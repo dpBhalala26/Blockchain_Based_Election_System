@@ -6,6 +6,9 @@ export interface Election {
     endDate: Date;
     status:string;
     createdBy:string;
-    voters:string[];
-    candidates:string[];
+    voters:{id:string,publicAddress:string}[];
+    candidates:{id:string,name:string}[];
+    deploymentPost:string;
+    deploymentLocation:string;
+    contractMnemonics:string;
   }

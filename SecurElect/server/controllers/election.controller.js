@@ -10,9 +10,12 @@ async function create(election){
 }
 
 async function update(electionId, election){
-    /** cannot update email and role  */
+    /** updating election details*/
     //preventing creatorsId from updatating
     delete election.createdBy;
+    delete election.voters
+    delete election.candidates
+
     election.status = "modified";
     const updatedElection = await Election.findByIdAndUpdate(electionId,election);
     console.log(updatedElection, `  : in electionController.update `);
@@ -52,12 +55,76 @@ async function getAllElectionCreatedByAdmin(adminId,state=""){
         return null;
     }
 }
+async function getAllElectionJoinedByVoter(voterId,state=""){
+    if(state!=""){
+        electionQuery = {"state":state,"voters":{$elemMatch:{"id":voterId}}}
+    }
+    else{
+        electionQuery = {"voters":{$elemMatch:{"id":voterId}}}
+    }
+    let elections = await Election.find(electionQuery);
+    if( elections ){
+        return elections;
+    }
+    else{
+        return null;
+    }
+}
 
+async function joinElection(electionId, voterId,publicAddress){
+    /** updating election details*/
+    const election = await Election.findOne({"_id":electionId});
+    msg = ""
+    if(election && voterId && publicKey){
+        election.voters.push({id:voterId,publicAddress:publicAddress});
+        election.save();
+        msg = "Joined Election Successfully"
+        return (election);
+    }
+    else if(election && voterId){
+        msg = "failed to join Election, missing Public Key"
+    }
+    else if (election){
+        msg = "failed to join Election, missing voter Details"
+    }else{
+        msg = "unable to find Election "
+    }
+    console.log(updatedElection, `  : in electionController.update `);
+    console.log("ERROR:",msg)
+    return null;
+}
+
+async function changeElectionStatus(eAdminId,electionId, status){
+    /** updating election details*/
+    election = Election.findById(electionId)
+    console.log(updatedElection, `  : in electionController.update `);
+    msg = ""
+    if(election.createdBy == eAdminId && validTransition(election.status,status)){
+        const updatedElection = await Election.findByIdAndUpdate(electionId,{status:status});
+        if ( updatedElection){
+            msg = "Status changed Successfully";
+        }
+        else{
+            msg = "Error in changing election status";
+        }
+        
+    }else{
+        msg = "Unauthorized action to change Election status";
+    }
+    return msg;
+}
+
+function validTransition(currentStatus,nextStatus){
+    /*Validate the transition of election status */
+    return true;
+}
 
 module.exports = {
     create,
     update,
     deleteElection,
     getElectionById,
-    getAllElectionCreatedByAdmin
+    getAllElectionCreatedByAdmin,
+    joinElection,
+    changeElectionStatus
 }
