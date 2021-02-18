@@ -13,6 +13,7 @@ const app = require("../config/express");
 const router = express.Router();
 
 /**  Routes for election */
+/** Tested OK */
 router.post(
   "",
   passport.authenticate("jwt", { session: false }),
@@ -30,12 +31,18 @@ async function createElection(req, res) {
   }
   election.status = "upcomming";
   election.createdBy = req.user._id;
-  var createdElction = await electionController.create(election);
-  res.json({ response: createElection });
+  try{
+    var createdElection = await electionController.create(election);
+    res.json({ "response": createdElection });
+  }
+  catch(err){
+    res.json({ "error": "couldnt add election in DB","details":err.message });
+  }
 }
 
+/**Tested Ok */
 router.put(
-  "/:id",
+  "",
   passport.authenticate("jwt", { session: false }),
   roleMW.validateRoleElectionAdmin,
   asyncHandler(updateElection)
@@ -43,11 +50,9 @@ router.put(
 
 async function updateElection(req, res) {
   const election = req.body;
-  const electionId = req.params["id"];
-  if (election == null) {
-    req.json({ error: "No Content to create" });
-  } else if (!election.startDate || !election.endDate) {
-    req.json({ error: "Please Provide Election Date's" });
+  const electionId = election._id//req.params["id"];
+  if (election == null || electionId==null) {
+    req.json({ error: "election_id missing" });
   } else if (election.startDate >= election.endDate) {
     req.json({ error: "Election Date's are inappropriate" });
   }
@@ -58,6 +63,7 @@ async function updateElection(req, res) {
   
 }
 
+/**Tested Ok */
 router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
@@ -74,6 +80,7 @@ async function deleteElection(req, res) {
   res.json({ response: deletedElection });
 }
 
+/** Tested OK */
 router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
@@ -90,10 +97,11 @@ async function getElectionById(req, res) {
   }
 }
 
+/**Tested Ok */
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
-  roleMW.validateRoleElectionAdmin,
+  roleMW.decodeJwt,
   asyncHandler(getElections)
 );
 
@@ -104,8 +112,12 @@ async function getElections(req, res) {
     case ("byElectionAdmin"):
       const eAdminId = req.user["_id"]; //req.params["eAdminId"];
       if (!eAdminId) {
-        req.json({ error: "Election Admin Id required" });
-      } else {
+        res.json({ error: "Election Admin Id required" });
+      }
+      else if (req.user.roles[0].name != "election-admin"){
+        res.json({ error: "Unauthorized access" });
+      }
+       else {
         var elections = await electionController.getAllElectionCreatedByAdmin(
           eAdminId
         );
@@ -126,22 +138,25 @@ async function getElections(req, res) {
   }
 }
 
-
+/**Tested Ok with a quick fix */
+/**Issue Unable to get data in req.body, way around is to get electionId in route param */
 router.post(
-  "/join-election",
+  "/join-election/:eid",
   passport.authenticate("jwt", { session: false }),
   roleMW.decodeJwt,
   asyncHandler(joinElection)
 );
+
+
 async function joinElection(req, res) {
+  const electionId = req.params["eid"];//req.body["electionId"];
   
-  const electionId = req.body["electionId"];
   const voterId = req.user._id
-  const publicAddress = req.user.publicKeyAddress
+  var publicAddress = req.user.publicKeyAddress
   if (electionId == null) {
-    req.json({ error: "No election Id found" });
-  } else if (!voterID || !publicAddress) {
-    req.json({ error: "unable to get user details (debug: details from token)" });
+    res.json({ error: "No election Id found in request body" });
+  } else if (!voterId || !publicAddress) {
+    res.json({ error: "unable to get user details (debug: details from token)" });
   }
   else{
     var election = await electionController.joinElection(electionId,voterId,publicAddress);
@@ -149,7 +164,7 @@ async function joinElection(req, res) {
   }
 }
 
-router.post(
+router.put(
   "/change-election-status",
   passport.authenticate("jwt", { session: false }),
   roleMW.validateRoleElectionAdmin,

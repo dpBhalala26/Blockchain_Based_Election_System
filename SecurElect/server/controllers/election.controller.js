@@ -1,6 +1,7 @@
 const Election = require('../models/election.model')
 const { request } = require('http');
 
+/**Tested OK */
 async function create(election){
     console.log(`ElectionController.Inserting`, election);
     var electionInstance = new Election(election)
@@ -8,26 +9,29 @@ async function create(election){
     console.log(`Saving Election to DB : `, electionInstance);
     return await electionInstance.save();
 }
-
+/**Tested Ok */
 async function update(electionId, election){
     /** updating election details*/
     //preventing creatorsId from updatating
     delete election.createdBy;
-    delete election.voters
-    delete election.candidates
+    delete election.voters;
+    delete election.candidates;
 
     election.status = "modified";
-    const updatedElection = await Election.findByIdAndUpdate(electionId,election);
+    var oldElection = await Election.findByIdAndUpdate(electionId,election);
+    const updatedElection = await Election.findById(oldElection._id);
     console.log(updatedElection, `  : in electionController.update `);
     return updatedElection;
 }
 
+/** Tested OK */
 async function deleteElection(electionId){
     console.log(electionId, ` : : in electionController.deleteElection`);
     const deletedElection = await Election.findByIdAndRemove(electionId);
     return deletedElection;
 }
 
+/** Tested OK */
 async function getElectionById(id){
     let election = await Election.findById(id);
     if( election ){
@@ -55,6 +59,7 @@ async function getAllElectionCreatedByAdmin(adminId,state=""){
         return null;
     }
 }
+
 async function getAllElectionJoinedByVoter(voterId,state=""){
     if(state!=""){
         electionQuery = {"state":state,"voters":{$elemMatch:{"id":voterId}}}
@@ -75,7 +80,7 @@ async function joinElection(electionId, voterId,publicAddress){
     /** updating election details*/
     const election = await Election.findOne({"_id":electionId});
     msg = ""
-    if(election && voterId && publicKey){
+    if(election && voterId && publicAddress){
         election.voters.push({id:voterId,publicAddress:publicAddress});
         election.save();
         msg = "Joined Election Successfully"
@@ -125,6 +130,7 @@ module.exports = {
     deleteElection,
     getElectionById,
     getAllElectionCreatedByAdmin,
+    getAllElectionJoinedByVoter,
     joinElection,
     changeElectionStatus
 }
