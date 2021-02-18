@@ -44,6 +44,7 @@ export class Web3Service {
       Web3.providers.HttpProvider.prototype.sendAsync =
         Web3.providers.HttpProvider.prototype.send;
       // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+      console.log("config.web3HttpProvider is : " + config.web3HttpProvider);
       this.web3 = new Web3(
         new Web3.providers.HttpProvider(config.web3HttpProvider)
       );
