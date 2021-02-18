@@ -38,8 +38,11 @@ contract ElectionContract {
     // candidates are added for the election
     event candidatesAdded(address indexed _from, string[] candidateIds, string[] candidateNames);
 
-    // voter made eligible events
-    event voterMadeEligible(address indexed _from, address voterAddress);
+    // voters made eligible events
+    event votersMadeEligible(address indexed _from, address[] voterAddresses);
+
+    // election initialized successfully
+    event electionInitialized(address indexed _from);
 
     // voted event when vote is casted successfully
     event votedEvent(address indexed _from);
@@ -62,7 +65,7 @@ contract ElectionContract {
     }
     
     // candidates names are taken dynamically so that we can use the contract for different elcetions
-    function addCandidateForElection(string[] memory candidateIds, string[] memory candidateNames) public {
+    function addCandidateForElection(string[] memory candidateIds, string[] memory candidateNames) private {
         // Message sender must be admin because only admin can add the candidates for election
         require(
             msg.sender == admin,
@@ -90,7 +93,7 @@ contract ElectionContract {
     }
 
     // Making the voter eligible to vote for the election
-    function makeVoterEligible(address voterAddress) public {
+    function makeVoterEligible(address[] memory voterAddresses) private {
         // Admin can make voter eligible only before the election is started
         require(
             currentElectionStatus == electionStatus.readyForVoting,
@@ -107,16 +110,26 @@ contract ElectionContract {
         //     "ERROR : This voter has voted in this election."
         // );
         // above condition is not needed to check, hence commented in order to avoid confusion
-        require(
-            !voters[voterAddress].eligible,
+        
+        for (uint256 x = 0; x < voterAddresses.length; x++) {
+            require(
+            !voters[voterAddresses[x]].eligible,
             "INFO : This person is already eligible to vote."
-        );
-        voters[voterAddress].eligible = true; // Making voter Eligible to vote
-    
+            );
+            voters[voterAddresses[x]].eligible = true; // Making voter Eligible to vote
+        }
+        
         // successfully made voter eligible
-        emit voterMadeEligible(msg.sender, voterAddress);
+        emit votersMadeEligible(msg.sender, voterAddresses);
     }
 
+    // To initialize the voting by adding candidates and making developers eligible
+    function initializeElection(string[] memory candidateIds, string[] memory candidateNames, address[] memory voterAddresses ) public{
+        addCandidateForElection(candidateIds, candidateNames);
+        makeVoterEligible(voterAddresses);
+        emit electionInitialized(msg.sender);
+    }
+    
     // Voting function
     function vote(string memory candidateId) public {
         // Voter can only vote after the elction has started and before ended
@@ -155,8 +168,7 @@ contract ElectionContract {
     function getCandidateDetails()
         public
         view
-        returns (Candidate[] memory candidateDetails)
-    {
+        returns (Candidate[] memory candidateDetails){
         // Winner candidate can be get only when the election is ended.
         require(
             currentElectionStatus == electionStatus.votingEnded,
@@ -170,8 +182,7 @@ contract ElectionContract {
     function getWinnerCandidateDetails()
         public
         view
-        returns (Candidate[] memory winnerCandidates)
-    {
+        returns (Candidate[] memory winnerCandidates){
         // Winner candidate can be get only when the election is ended.
         require(
             currentElectionStatus == electionStatus.votingEnded,
