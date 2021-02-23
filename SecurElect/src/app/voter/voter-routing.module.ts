@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CastVoteComponent } from './cast-vote/cast-vote.component';
 import { ElectionsJoinedComponent } from './elections-joined/elections-joined.component';
 import { HomeComponent } from './home/home.component';
 import { ViewElectionJoinedComponent } from './view-election-joined/view-election-joined.component';
@@ -16,7 +17,7 @@ const routes: Routes = [
     component: ElectionsJoinedComponent,
   },
   {
-    path: 'view-election-joined',
+    path: 'view-election-joined/:election_id',
     pathMatch: 'full',
     component: ViewElectionJoinedComponent,
   },
@@ -24,6 +25,11 @@ const routes: Routes = [
     path: 'home',
     pathMatch: 'full',
     component: HomeComponent,
+  },
+  {
+    path: 'cast-vote/:election_id',
+    pathMatch: 'full',
+    component: CastVoteComponent,
   },
 ];
 

@@ -5,7 +5,7 @@ import { ElectionService } from '../elections/election.service';
 import { Web3Service } from './web3.service';
 
 declare let require: any;
-const electionArtifacts = require('../../../../build/contracts/ElectionContract.json');
+const electionArtifacts =""//= require('../../../../build/contracts/ElectionContract.json');
 
 @Injectable({
   providedIn: 'root',

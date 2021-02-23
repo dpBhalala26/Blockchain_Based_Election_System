@@ -23,7 +23,8 @@ export class ElectionService {
   private addElection(election) {
     //this.user$.next(user);
     if (election) {
-      const newElections = { ...this.electionsDataStore.value, election};
+      const newElections = [ ...this.electionsDataStore.value, election];
+      console.log(newElections);
       this.electionsDataStore.next(newElections);
     } else {
       //this.electionsDataStore.next(null);
@@ -78,12 +79,25 @@ export class ElectionService {
   joinElection(electionId:string,voterId:string){
     //return this.$http.post(this.baseApiUrl+"/join-election",{electionId:electionId,voterId:voterId}).subscribe((response)=>{
     return this.$http.post(this.baseApiUrl+"/join-election/"+electionId,{}).subscribe((response)=>{
+      console.log(response);
       this.addElection(response["response"]);
     },
     (err)=>{
       console.log("error in joining Election");
       throwError("Error while joining Election, Please Check Internet connection");
     });
+  }
+
+  joinElectionAsCandidate(electionId:string,candidateId:string){
+    return this.$http.post(this.baseApiUrl+"/candidate-join-election/"+electionId,{}) as Observable<Election>
+    // return this.$http.post(this.baseApiUrl+"/candidate-join-election/"+electionId,{})
+    // .subscribe((response)=>{
+    //   console.log(response);
+    // },
+    // (err)=>{
+    //   console.log("error in joining Election as candidate");
+    //   throwError("Error while joining Election as candidate, Please Check Internet connection");
+    // });
   }
   
   changeElectionStatus(electionId,newStatus): Observable<Election>{

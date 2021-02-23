@@ -153,6 +153,11 @@ async function joinElection(req, res) {
   
   const voterId = req.user._id
   var publicAddress = req.user.publicKeyAddress
+  /**testing phase */
+  if(!publicAddress){
+    publicAddress="None";
+  }
+  console.log("TESTING",voterId,publicAddress);
   if (electionId == null) {
     res.json({ error: "No election Id found in request body" });
   } else if (!voterId || !publicAddress) {
@@ -163,6 +168,32 @@ async function joinElection(req, res) {
     res.json({ response: election });
   }
 }
+
+router.post(
+  "/candidate-join-election/:eid",
+  passport.authenticate("jwt", { session: false }),
+  roleMW.decodeJwt,
+  asyncHandler(joinElectionAsCandidate)
+);
+
+
+async function joinElectionAsCandidate(req, res) {
+  const electionId = req.params["eid"];//req.body["electionId"];
+  
+  const candidateId = req.user._id
+  const candidateName = req.user.uname
+  if (electionId == null) {
+    res.json({ error: "No election Id found in request body" });
+  } else if (!candidateId || !candidateName) {
+    res.json({ error: "unable to get user details (debug: details from token)" });
+  }
+  else{
+    var election = await electionController.joinElectionAsCandidate(electionId,candidateId,candidateName);
+    res.json({ response: election });
+  }
+}
+
+
 
 router.put(
   "/change-election-status",

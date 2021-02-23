@@ -26,7 +26,7 @@ export class ElectionsComponent implements OnInit {
       console.log(data["response"])
   })
   }
-  
+  /**Useless */
   addElection(election){
     //election.position = "2";
     //this.electionDataSource.push(election);
