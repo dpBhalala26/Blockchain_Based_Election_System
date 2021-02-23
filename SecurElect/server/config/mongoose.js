@@ -18,6 +18,7 @@ mngdb.on( 'error', () => {
 });
 
 if(config.mongo.isDebug){
+    mongoose.set('useFindAndModify', false);
     mongoose.set( 'debug', (collectionName, method, query, doc) => {
         debug(`${collectionName}.${method}`, util.inspect(query, false, 20), doc);
     });

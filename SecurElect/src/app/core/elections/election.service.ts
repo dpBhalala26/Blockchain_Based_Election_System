@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { error } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { Election } from '../election';
@@ -24,7 +23,8 @@ export class ElectionService {
   private addElection(election) {
     //this.user$.next(user);
     if (election) {
-      const newElections = { ...this.electionsDataStore.value, election};
+      const newElections = [ ...this.electionsDataStore.value, election];
+      console.log(newElections);
       this.electionsDataStore.next(newElections);
     } else {
       //this.electionsDataStore.next(null);
@@ -77,17 +77,31 @@ export class ElectionService {
     //return (this.$http.delete(this.baseApiUrl+"/"+electionId) as Observable<Election>).pipe();
   }
   joinElection(electionId:string,voterId:string){
-    return this.$http.post(this.baseApiUrl+"/join-election",{electionId:electionId,voterId:voterId}).subscribe((response)=>{
+    //return this.$http.post(this.baseApiUrl+"/join-election",{electionId:electionId,voterId:voterId}).subscribe((response)=>{
+    return this.$http.post(this.baseApiUrl+"/join-election/"+electionId,{}).subscribe((response)=>{
+      console.log(response);
       this.addElection(response["response"]);
     },
     (err)=>{
       console.log("error in joining Election");
-      throw error("Error while joining Election, Please Check Internet connection");
+      throwError("Error while joining Election, Please Check Internet connection");
     });
+  }
+
+  joinElectionAsCandidate(electionId:string,candidateId:string){
+    return this.$http.post(this.baseApiUrl+"/candidate-join-election/"+electionId,{}) as Observable<Election>
+    // return this.$http.post(this.baseApiUrl+"/candidate-join-election/"+electionId,{})
+    // .subscribe((response)=>{
+    //   console.log(response);
+    // },
+    // (err)=>{
+    //   console.log("error in joining Election as candidate");
+    //   throwError("Error while joining Election as candidate, Please Check Internet connection");
+    // });
   }
   
   changeElectionStatus(electionId,newStatus): Observable<Election>{
-    return this.$http.post(this.baseApiUrl+"change-election-status",{"electionId":electionId,"status":newStatus}) as Observable<Election>;
+    return this.$http.put(this.baseApiUrl+"change-election-status",{"electionId":electionId,"status":newStatus}) as Observable<Election>;
   }
 
   /*Development Infrastructure */

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ElectionService } from 'src/app/core/elections/election.service';
 
 @Component({
   selector: 'rd-view-election',
@@ -8,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ViewElectionComponent implements OnInit {
 
-  constructor(private route:ActivatedRoute) { }
+  constructor(private route:ActivatedRoute,private electionService:ElectionService,private snakeBar: MatSnackBar,private router:Router) { }
   election_id:string;
   ngOnInit(): void {
     console.log("this.election_id");
@@ -16,5 +18,22 @@ export class ViewElectionComponent implements OnInit {
       this.election_id = params.get("election_id");
       console.log(this.election_id);
     });
+  }
+
+  deleteElection(){
+    this.electionService.deleteElection(this.election_id).subscribe(
+      (data)=>{
+        console.log("election Deleted Successfully");
+        this.snakeBar.open("Successfully Deleted Election");
+        this.router.navigate(["election-admin/elections"])
+      },
+      (e)=>{
+        console.log("Error in election Deleted ");
+      }
+    )
+  }
+
+  takeToVotingBallot(electionId:string){
+    this.router.navigate(["/voting-dashboard"])
   }
 }
