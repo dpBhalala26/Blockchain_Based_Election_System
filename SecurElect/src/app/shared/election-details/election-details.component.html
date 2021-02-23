@@ -1,2 +1,83 @@
-<p>election-details works!</p>
-{{election_id}}
+<!-- <section fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-card fxFlex="500px" fxFlex.xs="100%">
+        <mat-card-title>Election Details </mat-card-title>
+        <mat-card-content>
+            
+          <div fxLayout="column wrap" fxLayoutGap="40px">
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Id</strong></div>
+                <div fxFlex>{{election?.id}}</div>
+              </div>
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Title:</strong></div>
+              <div fxFlex>{{election?.title}}</div>
+            </div>
+      
+            <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>Description:</strong></div>
+                <div fxFlex>{{election?.description}}</div>
+              </div>
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Start Date:</strong></div>
+              <div fxFlex>{{election?.startDate | date}}</div>
+            </div>
+      
+            <div fxLayout="row wrap" fxFlex >
+              <div fxFlex><strong>End Date:</strong></div>
+              <div fxFlex >{{election?.endDate | date}}</div>
+            </div>
+            
+              <div fxLayout="row wrap" fxFlex>
+                <div fxFlex><strong>status:</strong></div>
+                <div fxFlex class="advanced-color">{{election?.status}}</div>
+              </div>
+          </div>
+
+          
+          <button mat-raised-button color="warn" [disabled]="!allowVoting" (click)="takeToVoting()">
+            Lets Vote!
+          </button>
+          <br>
+          
+          
+        </mat-card-content>
+      </mat-card>
+</section> -->
+<button mat-raised-button color="warn" [disabled]="!allowVoting" (click)="takeToVoting()">
+  Lets Vote!
+</button>
+<!-- Candidates  -->
+<table mat-table [dataSource]="election?.candidates" class="mat-elevation-z8">
+  <!-- Position Column -->
+  <ng-container matColumnDef="Id">
+    <th mat-header-cell *matHeaderCellDef>No.</th>
+    <td mat-cell *matCellDef="let candidate">{{ candidate.id }}</td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let candidate">{{ candidate.name }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedCandidateColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedCandidateColumns"></tr>
+</table>
+<!-- /Table Candidate-->
+<mat-grid-list cols="2" rowHeight="5:1">
+  <mat-grid-tile><strong>Id</strong></mat-grid-tile>
+  <mat-grid-tile>{{election?.id}}</mat-grid-tile>
+  <mat-grid-tile><strong>Title:</strong></mat-grid-tile>
+  <mat-grid-tile>{{election?.title}}</mat-grid-tile>
+  <mat-grid-tile><strong>Description:</strong></mat-grid-tile>
+  <mat-grid-tile>{{election?.description}}</mat-grid-tile>
+  <mat-grid-tile><strong>Start Date:</strong></mat-grid-tile>
+  <mat-grid-tile>{{election?.startDate | date}}</mat-grid-tile>
+  
+  <mat-grid-tile><strong>End Date:</strong></mat-grid-tile>
+  <mat-grid-tile>{{election?.endDate | date}}</mat-grid-tile>
+
+  <mat-grid-tile><strong>status:</strong></mat-grid-tile>
+  <mat-grid-tile>{{election?.status}}</mat-grid-tile>
+</mat-grid-list>

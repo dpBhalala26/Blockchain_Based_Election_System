@@ -1,2 +1,5 @@
-<p>delete-election works!</p>
+<button mat-raised-button color="warn" (click)="deleteElection()" >
+    Delete
+</button>
+<!-- <rd-election-details [election_id]="election_id" (takeToVotingEvent)="takeToVotingBallot($event)"></rd-election-details> -->
 <rd-election-details [election_id]="election_id" ></rd-election-details>

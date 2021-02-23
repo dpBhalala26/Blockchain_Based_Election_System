@@ -5,7 +5,7 @@ const config = require('../config/config');
 
 const mongoUri = config.mongo.mongo_uri;
 
-mongoose.connect( mongoUri, { keepAlive: 1, useNewUriParser: true, useFindandModify: false } );
+mongoose.connect( mongoUri,{ useNewUrlParser: true , keepAlive: 1,useUnifiedTopology: true,useCreateIndex: true,} );
 
 const mngdb = mongoose.connection;
 
@@ -18,6 +18,7 @@ mngdb.on( 'error', () => {
 });
 
 if(config.mongo.isDebug){
+    mongoose.set('useFindAndModify', false);
     mongoose.set( 'debug', (collectionName, method, query, doc) => {
         debug(`${collectionName}.${method}`, util.inspect(query, false, 20), doc);
     });

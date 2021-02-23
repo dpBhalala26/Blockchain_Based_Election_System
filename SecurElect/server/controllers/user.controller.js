@@ -125,6 +125,13 @@ async function setUserUnVerifiable(userId,statusIssueMsg){
         return "invalid request";
     }
 }
+
+
+function isRoleRefKeyValid(role){
+    /* Verify here */
+    return true
+}
+
 module.exports = {
     user_insert,
     verifyAndGetUserByCredentials,
@@ -134,5 +141,6 @@ module.exports = {
     delete_user,
     getAllPendingUsers,
     setUserVerified,
-    setUserUnVerifiable
+    setUserUnVerifiable,
+    isRoleRefKeyValid
 };
