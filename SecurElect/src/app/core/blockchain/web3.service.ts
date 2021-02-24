@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+const Web3 = require('web3');
+//const contract = require('@truffle/contract');
+
 declare let require: any;
 declare let window: any;
 
-const Web3 = require('web3');
-const contract = require('@truffle/contract');
+//const Web3 = require('web3');
+//const contract = require('@truffle/contract');
 const config = require('src/config/config');
 
 @Injectable({
@@ -16,67 +19,37 @@ export class Web3Service {
   public ready = false;
 
   constructor() {
-    console.log('In web3 service constructor.');
-    window.addEventListener('load', (event) => {
-      console.log('Inside web3 service constructor window event listner');
-      this.initializeWeb3();
-    });
-    console.log('In web3 service constructor.: INITIALIZED');
+    this.initializeWeb3();
+    this.getAccountAddress();
   }
 
   initializeWeb3() {
-    console.log(
-      'In web3 service function: initiazeWeb3: widow.ethereum is :' +
-        window.ethereum
-    );
+    console.log('In web3 service function: initiazeWeb3: widow.ethereum is :');
+    console.log(window.ethereum);
 
     // Checking whether Web3 has been injected by the browser (MetaMask is used or not)
-    if (typeof window.ethereum !== 'undefined') {
+    if (window.ethereum) {
       // Use MetaMask's provider in broowser
-      console.log('In web3 service : window.ethereum undefined');
-      window.ethereum.enable().then(() => {
-        this.web3 = new Web3(window.ethereum);
-      });
-      console.log('after enabling: web3 is ' + this.web3);
+      console.log('In web3 service : window.ethereum');
+      window.web3 = new Web3(window.ethereum);
+      console.log('after enabling: web3 is '); console.log(window.web3);
     } else {
-      console.log('No web3? You should consider trying MetaMask!');
-
-      // Hack to provide backwards compatibility for Truffle, which uses web3js 0.20.x
-      Web3.providers.HttpProvider.prototype.sendAsync =
-        Web3.providers.HttpProvider.prototype.send;
-      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-      console.log("config.web3HttpProvider is : " + config.web3HttpProvider);
-      this.web3 = new Web3(
-        new Web3.providers.HttpProvider(config.web3HttpProvider)
-      );
-
-      console.log('after setting httpprovider: web3 is ' + this.web3);
+      console.log("Else of windoes.ethereum");
     }
   }
 
-  public async convertArtifactsToContract(artifacts) {
-    console.log(
-      'In web3 service: in convertArtifactsToContract function ' + artifacts
-    );
-    if (!this.web3) {
-      const delay = new Promise((resolve) => setTimeout(resolve, 100));
-      await delay;
-      return await this.convertArtifactsToContract(artifacts);
-    }
+  public convertArtifactsToContract(artifacts): Promise<any> {
+    console.log('In web3 service: in convertArtifactsToContract function '); 
+    console.log(artifacts);
 
-    const absContract = contract(artifacts);
-    absContract.setProvider(this.web3.currentProvider);
-    console.log('abs contract is :' + absContract);
+    var absContract: Promise<any> = new window.web3.eth.Contract(artifacts["abi"], this.getAccountAddress());
+    
+    console.log('abs contract is :');
+    console.log(absContract);
     return absContract;
   }
 
-  public async getAccountAddress(){
-    var account:string;
-    this.web3.eth.getCoinbase( function(err, acc) {
-      if (err === null){
-        account = acc;
-      }
-    } );
-    return account;
+  public getAccountAddress(){
+    return window.ethereum.request({ method: 'eth_requestAccounts' }).then((arr) => { console.log("Getting account"); console.log(arr); return arr[0];});
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SmartContractService } from 'src/app/core/blockchain/smart-contract.service';
 import { ElectionService } from 'src/app/core/elections/election.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { ElectionService } from 'src/app/core/elections/election.service';
 })
 export class ViewElectionComponent implements OnInit {
 
-  constructor(private route:ActivatedRoute,private electionService:ElectionService,private snakeBar: MatSnackBar,private router:Router) { }
+  constructor(private route:ActivatedRoute,private electionService:ElectionService,private snakeBar: MatSnackBar,private router:Router, private smartContractService : SmartContractService) { }
   election_id:string;
   ngOnInit(): void {
     console.log("this.election_id");
@@ -18,6 +19,30 @@ export class ViewElectionComponent implements OnInit {
       this.election_id = params.get("election_id");
       console.log(this.election_id);
     });
+  }
+
+  migrateElectionContract(){
+    this.smartContractService.migrateElectionContract("","","","");
+  }
+
+  initializeVotingProcess(){
+    this.smartContractService.initializeVotingProcess("");
+  }
+
+  castVote(){
+    this.smartContractService.castVote("","");
+  }
+
+  finalizeVotingProcess(){
+    this.smartContractService.finalizeVotingProcess("");
+  }
+
+  getElectionsResults(){
+    this.smartContractService.getElectionsResults("");
+  }
+
+  getWinningCandidatesDetails(){
+    this.smartContractService.getWinningCandidatesDetails("");
   }
 
   deleteElection(){

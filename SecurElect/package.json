@@ -14,7 +14,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "server:debug": "node --nolazy --inspect-brk=9229 server"
+    "server:debug": "node --nolazy --inspect-brk=9229 server",
+    "postinstall": "node patch.js"
   },
   "private": true,
   "dependencies": {
@@ -69,5 +70,9 @@
     "tslint": "~6.1.0",
     "typescript": "~4.0.2"
   },
-  "browser": { "fs": false, "path": false, "os": false}
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  }
 }

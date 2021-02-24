@@ -5,7 +5,7 @@ import { ElectionService } from '../elections/election.service';
 import { Web3Service } from './web3.service';
 
 declare let require: any;
-const electionArtifacts =""//= require('../../../../build/contracts/ElectionContract.json');
+const electionArtifacts = require('../../../../build/contracts/ElectionContract.json');
 
 @Injectable({
   providedIn: 'root',
@@ -20,41 +20,27 @@ export class SmartContractService {
     private web3Service: Web3Service,
     private electionService: ElectionService
   ) {
-    console.log(
-      'In smart-contract service constructor: Web3Service is=' + web3Service
-    );
-    console.log(
-      'In smart-contract service constructor: ElectionService is=' +
-        electionService
-    );
-    console.log('OnConstruct: ' + this.web3Service);
-    console.log(this);
-    // watch current account
+    console.log('In smart-contract service constructor: Web3Service is=');
+    console.log(this.web3Service);
+    console.log('In smart-contract service constructor: ElectionService is='); 
+    console.log(this.electionService);
+    
+    console.log('In smart-contract service constructor: electionArtifacts=');
+    console.log(electionArtifacts);
     this.web3Service
       .convertArtifactsToContract(electionArtifacts)
       .then((absContract) => {
+        console.log('returned abs contract is :');
+        console.log(absContract);
         this.electionContract = absContract;
-        this.electionContract.deployed().then((deployed) => {
-          console.log(
-            'OnConstruct: election contract deployed successfully.' + deployed
-          );
-        });
-      });
-    console.log('After converting aftifacts..');
-    this.getAccountAddress().then((acc) => {
-      console.log('Got acc at counstructor: ' + acc);
     });
+    console.log('After converting aftifacts: electionContract is =');
+    console.log(this.electionContract);
+    this.getAccountAddress();
   }
 
-  async getAccountAddress() {
-    this.web3Service.getAccountAddress().then((acc) => {
-      console.log('Got acc at method: ' + acc);
-      this.accountAddress = acc;
-    });
-    console.log(
-      'After getting account address :::: address:' + this.accountAddress
-    );
-    return this.accountAddress;
+  getAccountAddress() {
+    this.web3Service.getAccountAddress();
   }
 
   // Function to initialize and migrate smart contract to the blockchain.
@@ -204,11 +190,11 @@ export class SmartContractService {
     // return string  ("Success") or throwError
   }
 
-  async getCandidateVoteCounts(electionId: string) {
+  async getElectionsResults(electionId: string) {
     // returns Candidate[]
   }
 
-  async getWinningCandidates(electionId: string) {
+  async getWinningCandidatesDetails(electionId: string) {
     // returns Candidate[]
   }
 

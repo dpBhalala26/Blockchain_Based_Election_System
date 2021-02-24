@@ -3,3 +3,43 @@
 </button>
 <!-- <rd-election-details [election_id]="election_id" (takeToVotingEvent)="takeToVotingBallot($event)"></rd-election-details> -->
 <rd-election-details [election_id]="election_id" ></rd-election-details>
+<mat-card class="view-election-buttons-card">
+    <table class="full-width">
+        <tr>
+            <td>
+                <button mat-raised-button color="primary" (click)="migrateElectionContract()" class="full-width"
+                    tabindex="0">migrateElectionContract</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button mat-raised-button color="primary" (click)="initializeVotingProcess()" class="full-width"
+                    tabindex="0">initializeVotingProcess</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button mat-raised-button color="primary" (click)="castVote()" class="full-width"
+                    tabindex="0">castVote</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button mat-raised-button color="primary" (click)="finalizeVotingProcess()" class="full-width"
+                    tabindex="0">finalizeVotingProcess</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button mat-raised-button color="primary" (click)="getElectionsResults()" class="full-width"
+                    tabindex="0">getElectionsResults</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button mat-raised-button color="primary" (click)="getWinningCandidatesDetails()" class="full-width"
+                    tabindex="0">getWinningCandidatesDetails</button>
+            </td>
+        </tr>
+    </table>
+</mat-card>
