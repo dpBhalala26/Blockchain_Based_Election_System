@@ -48,7 +48,7 @@ export class Web3Service {
     const web3ProviderURL = 'http://127.0.0.1:8545';
     this.web3.setProvider(web3ProviderURL);
     //this.web3.eth.defaultAccount = this.authService.userValue.publicKey;
-    this.web3.eth.defaultAccount = '0x97a473f913BFC92b0EdbEc8E73C1A9b731A471f1';
+    this.web3.eth.defaultAccount = '0xD82fD0a915d13f05aE37a0E8B512951e1BEee963';
     console.log('In initialize web3');
     console.log(this.web3);
   }
@@ -63,6 +63,16 @@ export class Web3Service {
     console.log(absContract);
     return absContract;
   }  */
+
+  private getNonce(){
+    this.web3.eth.getTransactionCount(
+      this.web3.eth.defaultAccount,
+      (err, nonce) => {
+        console.log('nonce value is ');
+        this.conNonce = nonce;
+        console.log(nonce);});
+    return this.conNonce;
+  }
 
   public convertArtifactsToContract(artifacts) {
     this.web3.eth.getTransactionCount(
@@ -95,24 +105,9 @@ export class Web3Service {
     return window.ethereum.request({ method: 'eth_requestAccounts' }).then((arr) => { console.log("Getting account"); console.log(arr); return arr[0];});
   } */
 
-  public getAccountAddress() {
-    console.log(this.authService.userValue.publicKey);
-    return this.authService.userValue.publicKey;
-  }
-
-  public migrateElectionContract(
-    candIds,
-    candNames,
-    voterAddresses,
-    privateKey
-  ) {
-    const funAbi = this.electionContract.methods
-      .initializeElection(candIds, candNames, voterAddresses)
-      .encodeABI();
-    console.log('In web3, migrateElection: funAbi is:');
-    console.log(funAbi);
+  private sendTxForContractFun(funAbi, privateKey){
     var details = {
-      nonce: this.conNonce,
+      nonce: this.getNonce(),
       gasPrice: this.web3.utils.toHex(this.web3.utils.toWei('47', 'gwei')),
       gas: 300000,
       to: this.contractAddress,
@@ -123,7 +118,7 @@ export class Web3Service {
     const customCommon = Common.forCustomChain(
       'mainnet',
       {
-          name: 'my-private-blockchain',
+          name: 'SecurElect',
           networkId: 5777,
           chainId: 1337,
       },
@@ -144,5 +139,33 @@ export class Web3Service {
       .on('error', (err) => {
         console.log('ERROR After sending: Error is: ', err);
       });
+    
+  }
+  public getAccountAddress() {
+    console.log(this.authService.userValue.publicKey);
+    return this.authService.userValue.publicKey;
+  }
+
+  public migrateElectionContract(
+    candIds,
+    candNames,
+    voterAddresses,
+    privateKey
+  ) {
+    const funAbi = this.electionContract.methods
+      .initializeElection(candIds, candNames, voterAddresses)
+      .encodeABI();
+    console.log('In web3, migrateElection: funAbi is:');
+    console.log(funAbi);
+    this.sendTxForContractFun(funAbi, privateKey);
+  }
+
+  public initializeVotingProcess(privateKey){
+    const funAbi = this.electionContract.methods
+      .initializeVotingProcess()
+      .encodeABI();
+    console.log('In web3, initializeVotingProcess: funAbi is:');
+    console.log(funAbi);
+    this.sendTxForContractFun(funAbi, privateKey);
   }
 }
