@@ -1,28 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
+import Common from 'ethereumjs-common';
 
 const Web3 = require('web3');
+const EthereumTx = require('ethereumjs-tx').Transaction;
 //const contract = require('@truffle/contract');
 
 declare let require: any;
 declare let window: any;
+declare const Buffer;
 
-//const Web3 = require('web3');
-//const contract = require('@truffle/contract');
 const config = require('src/config/config');
 
 @Injectable({
   providedIn: 'root',
 })
 export class Web3Service {
-  private web3: any;
   public ready = false;
+  electionContract: any;
+  conNonce: any;
+  contractAddress: string;
+  web3 = new Web3();
 
-  constructor() {
+  constructor(private authService: AuthService) {
     this.initializeWeb3();
     this.getAccountAddress();
   }
-
+  /*
   initializeWeb3() {
     console.log('In web3 service function: initiazeWeb3: widow.ethereum is :');
     console.log(window.ethereum);
@@ -37,7 +42,17 @@ export class Web3Service {
       console.log("Else of windoes.ethereum");
     }
   }
+*/
 
+  initializeWeb3() {
+    const web3ProviderURL = 'http://127.0.0.1:8545';
+    this.web3.setProvider(web3ProviderURL);
+    //this.web3.eth.defaultAccount = this.authService.userValue.publicKey;
+    this.web3.eth.defaultAccount = '0x97a473f913BFC92b0EdbEc8E73C1A9b731A471f1';
+    console.log('In initialize web3');
+    console.log(this.web3);
+  }
+  /*  
   public convertArtifactsToContract(artifacts): Promise<any> {
     console.log('In web3 service: in convertArtifactsToContract function '); 
     console.log(artifacts);
@@ -47,9 +62,87 @@ export class Web3Service {
     console.log('abs contract is :');
     console.log(absContract);
     return absContract;
+  }  */
+
+  public convertArtifactsToContract(artifacts) {
+    this.web3.eth.getTransactionCount(
+      this.web3.eth.defaultAccount,
+      (err, nonce) => {
+        console.log('nonce value is ');
+        this.conNonce = nonce;
+        console.log(nonce);
+        console.log(artifacts['abi']);
+        this.contractAddress = artifacts['networks']['5777']['address'];
+        console.log(this.contractAddress);
+        const contract = new this.web3.eth.Contract(
+          artifacts['abi'],
+          this.contractAddress,
+          {
+            from: this.web3.eth.defaultAccount,
+            gas: 3000000,
+          }
+        );
+        console.log('abs contract is and type:');
+        console.log(contract);
+        this.electionContract = contract;
+        console.log(this.electionContract);
+      }
+    );
   }
 
+  /*
   public getAccountAddress(){
     return window.ethereum.request({ method: 'eth_requestAccounts' }).then((arr) => { console.log("Getting account"); console.log(arr); return arr[0];});
+  } */
+
+  public getAccountAddress() {
+    console.log(this.authService.userValue.publicKey);
+    return this.authService.userValue.publicKey;
+  }
+
+  public migrateElectionContract(
+    candIds,
+    candNames,
+    voterAddresses,
+    privateKey
+  ) {
+    const funAbi = this.electionContract.methods
+      .initializeElection(candIds, candNames, voterAddresses)
+      .encodeABI();
+    console.log('In web3, migrateElection: funAbi is:');
+    console.log(funAbi);
+    var details = {
+      nonce: this.conNonce,
+      gasPrice: this.web3.utils.toHex(this.web3.utils.toWei('47', 'gwei')),
+      gas: 300000,
+      to: this.contractAddress,
+      value: 0,
+      data: funAbi,
+    };
+
+    const customCommon = Common.forCustomChain(
+      'mainnet',
+      {
+          name: 'my-private-blockchain',
+          networkId: 5777,
+          chainId: 1337,
+      },
+      'petersburg',
+  );
+    //const transaction = new EthereumTx(details, { chain: '1337', hardfork: 'muirglacier' });
+    const transaction = new EthereumTx(details, {common: customCommon});
+    transaction.sign(Buffer.from(privateKey, 'hex'));
+    var rawData = '0x' + transaction.serialize().toString('hex');
+    this.web3.eth
+      .sendSignedTransaction(rawData)
+      .on('transactionHash', (hash) => {
+        console.log('After sending: Transaction Hash is: ', hash);
+      })
+      .on('receipt', (receipt) => {
+        console.log('After sending: Transaction Receipt is: ', receipt);
+      })
+      .on('error', (err) => {
+        console.log('ERROR After sending: Error is: ', err);
+      });
   }
 }
