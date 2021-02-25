@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import Common from 'ethereumjs-common';
 
@@ -48,7 +48,7 @@ export class Web3Service {
     const web3ProviderURL = 'http://127.0.0.1:8545';
     this.web3.setProvider(web3ProviderURL);
     //this.web3.eth.defaultAccount = this.authService.userValue.publicKey;
-    this.web3.eth.defaultAccount = '0xD82fD0a915d13f05aE37a0E8B512951e1BEee963';
+    this.web3.eth.defaultAccount = '0x19574eF12Cce1DdD794Fe71B0845e6B677940ccE';
     console.log('In initialize web3');
     console.log(this.web3);
   }
@@ -64,13 +64,15 @@ export class Web3Service {
     return absContract;
   }  */
 
-  private getNonce(){
+  private getNonce() {
     this.web3.eth.getTransactionCount(
       this.web3.eth.defaultAccount,
       (err, nonce) => {
         console.log('nonce value is ');
         this.conNonce = nonce;
-        console.log(nonce);});
+        console.log(nonce);
+      }
+    );
     return this.conNonce;
   }
 
@@ -105,7 +107,7 @@ export class Web3Service {
     return window.ethereum.request({ method: 'eth_requestAccounts' }).then((arr) => { console.log("Getting account"); console.log(arr); return arr[0];});
   } */
 
-  private sendTxForContractFun(funAbi, privateKey){
+  private sendTxForContractFun(funAbi, privateKey) {
     var details = {
       nonce: this.getNonce(),
       gasPrice: this.web3.utils.toHex(this.web3.utils.toWei('47', 'gwei')),
@@ -118,14 +120,14 @@ export class Web3Service {
     const customCommon = Common.forCustomChain(
       'mainnet',
       {
-          name: 'SecurElect',
-          networkId: 5777,
-          chainId: 1337,
+        name: 'SecurElect',
+        networkId: 5777,
+        chainId: 1337,
       },
-      'petersburg',
-  );
+      'petersburg'
+    );
     //const transaction = new EthereumTx(details, { chain: '1337', hardfork: 'muirglacier' });
-    const transaction = new EthereumTx(details, {common: customCommon});
+    const transaction = new EthereumTx(details, { common: customCommon });
     transaction.sign(Buffer.from(privateKey, 'hex'));
     var rawData = '0x' + transaction.serialize().toString('hex');
     this.web3.eth
@@ -139,7 +141,6 @@ export class Web3Service {
       .on('error', (err) => {
         console.log('ERROR After sending: Error is: ', err);
       });
-    
   }
   public getAccountAddress() {
     console.log(this.authService.userValue.publicKey);
@@ -160,12 +161,70 @@ export class Web3Service {
     this.sendTxForContractFun(funAbi, privateKey);
   }
 
-  public initializeVotingProcess(privateKey){
+  public initializeVotingProcess(privateKey) {
     const funAbi = this.electionContract.methods
       .initializeVotingProcess()
       .encodeABI();
     console.log('In web3, initializeVotingProcess: funAbi is:');
     console.log(funAbi);
     this.sendTxForContractFun(funAbi, privateKey);
+  }
+
+  public castVote(candId, privateKey) {
+    const funAbi = this.electionContract.methods.vote(candId).encodeABI();
+    console.log('In web3, castVote: funAbi is:');
+    console.log(funAbi);
+    this.sendTxForContractFun(funAbi, privateKey);
+  }
+
+  public finalizeVotingProcess(privateKey) {
+    const funAbi = this.electionContract.methods
+      .finalizeVotingProcess()
+      .encodeABI();
+    console.log('In web3, finalizeVotingProcess: funAbi is:');
+    console.log(funAbi);
+    this.sendTxForContractFun(funAbi, privateKey);
+  }
+
+  public getElectionsResults(privateKey) {
+    // const funAbi = this.electionContract.methods
+    //   .getCandidateDetails()
+    //   .encodeABI();
+    // console.log('In web3, getElectionsResults: funAbi is:');
+    // console.log(funAbi);
+    // this.sendTxForContractFun(funAbi, privateKey);
+    console.log('In web3, getElectionsResults:');
+    return this.electionContract.methods
+      .getCandidateDetails()
+      .call({ from: this.web3.eth.defaultAccount })
+      .then((result) => {
+        console.log(result);
+        return result;
+      })
+      .catch((err) => {
+        console.log('Error : ', err);
+        return throwError(err);
+      });
+  }
+
+  public getWinningCandidatesDetails(privateKey) {
+    // const funAbi = this.electionContract.methods
+    //   .getWinnerCandidateDetails()
+    //   .encodeABI();
+    // console.log('In web3, getWinningCandidatesDetails: funAbi is:');
+    // console.log(funAbi);
+    // this.sendTxForContractFun(funAbi, privateKey);
+    console.log('In web3, getWinningCandidatesDetails:');
+    return this.electionContract.methods
+      .getWinnerCandidateDetails()
+      .call({ from: this.web3.eth.defaultAccount })
+      .then((result) => {
+        console.log(result);
+        return result;
+      })
+      .catch((err) => {
+        console.log('Error : ', err);
+        return throwError(err);
+      });
   }
 }
