@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import * as EventEmitter from 'events';
+import { EventEmitter } from '@angular/core';
 import { Election } from 'src/app/core/election';
 import { ElectionService } from 'src/app/core/elections/election.service';
 
@@ -13,12 +13,14 @@ import { ElectionService } from 'src/app/core/elections/election.service';
 export class ElectionDetailsComponent implements OnInit {
 
   @Input() election_id:string;
-  @Output() takeToVotingEvent = new EventEmitter();
+  @Output() takeToVotingEvent:EventEmitter<any> = new EventEmitter();
   //@Output() AllowToStandAsCandidate = new EventEmitter();
   displayedCandidateColumns: string[] = ['Id', 'name'];
-  
   election:Election;
-  allowVoting:boolean=false;
+  allowVoting:boolean=true;
+
+  panelOpenState = false;
+  
   constructor(private electionService:ElectionService,private snakeBar: MatSnackBar,private router:Router) { }
 
   ngOnInit(): void {
@@ -31,12 +33,14 @@ export class ElectionDetailsComponent implements OnInit {
         if(this.election.startDate <= currentDate){
           this.allowVoting = true
         }
+        
       },
       (err) =>{
         console.error("election-details.getElection")
       })
   }
   takeToVoting(){
+    window.alert("Taking to voting page");
     this.takeToVotingEvent.emit(this.election_id);
   }
 }

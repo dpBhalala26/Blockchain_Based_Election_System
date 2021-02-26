@@ -33,7 +33,7 @@ const electionSchema = new mongoose.Schema({
         id: String,
         name:String
     }],
-    deploymentPost:{
+    deploymentPort:{
         type: String
     },
     deploymentLocation:{
