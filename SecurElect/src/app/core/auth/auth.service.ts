@@ -20,6 +20,11 @@ export class AuthService {
   get user() {
     return this.user$.asObservable();
   }
+
+  get userValue() {
+    return this.user$.value;
+  }
+
   private setUser(user) {
     //this.user$.next(user);
     if (user) {

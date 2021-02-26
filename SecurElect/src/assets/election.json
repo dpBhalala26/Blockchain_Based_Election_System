@@ -9,10 +9,11 @@
     "status": "upcomming",
     "createdBy": "60056f1601b2b41e28efa187",
     "voters": [
-      { "id": "1", "publicAddress": "1" },
-      { "id": "2", "publicAddress": "2" }
+      { "id": "1", "publicAddress": "0x2ccD2902e36267D9C930cbB39656F3C6BB3f31dF" },
+      { "id": "2", "publicAddress": "0x384F42f11b20BB2D51C77d66d259025e9a649B18" },
+      { "id": "3", "publicAddress": "0x64d8e82D6dDb3d4c5dE634D6F3156E5C6F7776CE" }
     ],
-    "candidates": [{ "id": "1", "name": "1" }],
+    "candidates": [{ "id": "c11", "name": "cand11" }, { "id": "c12", "name": "cand12" },{ "id": "c13", "name": "cand13" }],
     "deploymentPost": "",
     "deploymentLocation": "",
     "contractMnemonics": "",

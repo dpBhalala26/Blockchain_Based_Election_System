@@ -27,7 +27,8 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     publicKey:{
-        type: String
+        type: String,
+        default: "0x"
     },
     status:{
         type: String,
