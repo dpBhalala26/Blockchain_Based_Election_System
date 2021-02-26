@@ -58,7 +58,7 @@ export class ViewElectionComponent implements OnInit {
   }
 
   castVote() {
-    this.smartContractService.castVote(this.election_id, '', this.pkGroup.get('privateKey').value);
+    this.smartContractService.castVote(this.election_id, 'c11', this.pkGroup.get('privateKey').value);
   }
 
   finalizeVotingProcess() {
@@ -66,11 +66,11 @@ export class ViewElectionComponent implements OnInit {
   }
 
   getElectionsResults() {
-    this.smartContractService.getElectionsResults(this.election_id, this.pkGroup.get('privateKey').value);
+    this.smartContractService.getElectionsResults(this.election_id);
   }
 
   getWinningCandidatesDetails() {
-    this.smartContractService.getWinningCandidatesDetails(this.election_id, this.pkGroup.get('privateKey').value);
+    this.smartContractService.getWinningCandidatesDetails(this.election_id);
   }
 
   deleteElection() {

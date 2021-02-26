@@ -186,7 +186,7 @@ export class Web3Service {
     this.sendTxForContractFun(funAbi, privateKey);
   }
 
-  public getElectionsResults(privateKey) {
+  public getElectionsResults() {
     // const funAbi = this.electionContract.methods
     //   .getCandidateDetails()
     //   .encodeABI();
@@ -207,7 +207,7 @@ export class Web3Service {
       });
   }
 
-  public getWinningCandidatesDetails(privateKey) {
+  public getWinningCandidatesDetails() {
     // const funAbi = this.electionContract.methods
     //   .getWinnerCandidateDetails()
     //   .encodeABI();
@@ -219,7 +219,21 @@ export class Web3Service {
       .getWinnerCandidateDetails()
       .call({ from: this.web3.eth.defaultAccount })
       .then((result) => {
-        console.log(result);
+        //console.log(result);
+        return result;
+      })
+      .catch((err) => {
+        console.log('Error : ', err);
+        return throwError(err);
+      });
+  }
+
+  public getVoterByPublicKey(publicKey) {
+    return this.electionContract.methods
+      .getVoterByAddress(publicKey)
+      .call({ from: this.web3.eth.defaultAccount })
+      .then((result) => {
+        //console.log(result);
         return result;
       })
       .catch((err) => {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
+import { Candidate } from '../candidate';
 import { Election } from '../election';
 import { ElectionService } from '../elections/election.service';
 import { Web3Service } from './web3.service';
@@ -55,13 +56,16 @@ export class SmartContractService {
       //   '0xFEc985Cbb7880Ca4F2C55A70429b194E1dC37Ee5',
       //   '0x6E3986DfF67302cEb87765CE2Cb70d49ac9C4233',
       // ];
-      this.electionService.getElection(electionId).subscribe((data) => { this.election = data});
-      console.log("thisElection: ", this.election);
+      this.electionService.getElectionForTesting(electionId).subscribe(async (data) => { this.election = data['response']; 
+        console.log("thisElection: ");
+      console.log(this.election);
+      console.log(this.election.candidates);
       const candIds = this.election.candidates.map( cnd => cnd.id);
       const candNames = this.election.candidates.map( cnd => cnd.name);
+      console.log(this.election.voters);
       const voterAddresses = this.election.voters.map( vtr => vtr.publicAddress);
       //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
-      this.web3Service.migrateElectionContract(
+      await this.web3Service.migrateElectionContract(
         candIds,
         candNames,
         voterAddresses,
@@ -71,7 +75,8 @@ export class SmartContractService {
       // return string  ("Success") or throwError
       this.setServiceStatus('Sccess in migrateElectionContract');
       console.log(this.serviceStatus);
-      return 'Success';
+      return 'Success';});
+      
     } catch (err) {
       console.log('ERROR in migrateElectionContract : error: ' + err);
       return throwError(err);
@@ -148,7 +153,7 @@ export class SmartContractService {
     // return string  ("Success") or throwError
     try {
       //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
-      this.web3Service.initializeVotingProcess(privateKey);
+      await this.web3Service.initializeVotingProcess(privateKey);
       this.setServiceStatus('Sccess in initializeVotingProcess');
       console.log(this.serviceStatus);
       return 'Success';
@@ -164,7 +169,7 @@ export class SmartContractService {
     try {
       //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
       const candId = 'c11';
-      this.web3Service.castVote(candId, privateKey);
+      await this.web3Service.castVote(candId, privateKey);
       this.setServiceStatus('Sccess in castVote');
       console.log(this.serviceStatus);
       return 'Success';
@@ -180,7 +185,7 @@ export class SmartContractService {
     // return string  ("Success") or throwError
     try {
       //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
-      this.web3Service.finalizeVotingProcess(privateKey);
+      await this.web3Service.finalizeVotingProcess(privateKey);
       this.setServiceStatus('Sccess in finalizeVotingProcess');
       console.log(this.serviceStatus);
       return 'Success';
@@ -190,34 +195,54 @@ export class SmartContractService {
     }
   }
 
-  async getElectionsResults(electionId: string, privateKey: string) {
+  async getElectionsResults(electionId: string) {
     // returns Candidate[]
     try {
       //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
-      var result = this.web3Service.getElectionsResults(privateKey);
+      var result = await this.web3Service.getElectionsResults();
       this.setServiceStatus('Sccess in getElectionsResults');
       console.log('Candidates : ');
-      console.log(result);
+      //console.log(result);
       console.log(this.serviceStatus);
-      return 'Success';
+      var retCand = result as Candidate[];
+      console.log(retCand);
+      return retCand;
     } catch (err) {
       console.log('ERROR in getElectionsResults : error: ' + err);
       return throwError(err);
     }
   }
 
-  async getWinningCandidatesDetails(electionId: string, privateKey: string) {
+  async getWinningCandidatesDetails(electionId: string) {
     // returns Candidate[]
     try {
       //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
-      var result = this.web3Service.getWinningCandidatesDetails(privateKey);
+      var result = await this.web3Service.getWinningCandidatesDetails();
       this.setServiceStatus('Sccess in getWinningCandidatesDetails');
       console.log('Winning Candidates : ');
-      console.log(result);
+      //console.log(result);
       console.log(this.serviceStatus);
-      return 'Success';
+      var retCand = result as Candidate[];
+      console.log(retCand);
+      return retCand;
     } catch (err) {
       console.log('ERROR in getWinningCandidatesDetails : error: ' + err);
+      return throwError(err);
+    }
+  }
+
+  async getVoterByPublicKey(electionId: string, publicKey: string) {
+    // returns Candidate[]
+    try {
+      //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
+      var result = await this.web3Service.getVoterByPublicKey(publicKey);
+      this.setServiceStatus('Sccess in getVoterByPublicKey');
+      console.log('Voter is : ');
+      console.log(result);
+      console.log(this.serviceStatus);
+      return result;
+    } catch (err) {
+      console.log('ERROR in getVoterByPublicKey : error: ' + err);
       return throwError(err);
     }
   }
