@@ -9,9 +9,9 @@
     "status": "upcomming",
     "createdBy": "60056f1601b2b41e28efa187",
     "voters": [
-      { "id": "1", "publicAddress": "0x54968b86F1038e0C2e3d01208457b60d92514568" },
-      { "id": "2", "publicAddress": "0x5038CBE6f6141B545db6CCe59F94C103Afb6164f" },
-      { "id": "3", "publicAddress": "0xD3aDdD10312bbF140529597cae94327c1700fa51" }
+      { "id": "1", "publicAddress": "0x2ccD2902e36267D9C930cbB39656F3C6BB3f31dF" },
+      { "id": "2", "publicAddress": "0x384F42f11b20BB2D51C77d66d259025e9a649B18" },
+      { "id": "3", "publicAddress": "0x64d8e82D6dDb3d4c5dE634D6F3156E5C6F7776CE" }
     ],
     "candidates": [{ "id": "c11", "name": "cand11" }, { "id": "c12", "name": "cand12" },{ "id": "c13", "name": "cand13" }],
     "deploymentPost": "",
