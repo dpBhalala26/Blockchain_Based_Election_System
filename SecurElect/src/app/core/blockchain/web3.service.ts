@@ -47,8 +47,8 @@ export class Web3Service {
   initializeWeb3() {
     const web3ProviderURL = 'http://127.0.0.1:8545';
     this.web3.setProvider(web3ProviderURL);
-    //this.web3.eth.defaultAccount = this.authService.userValue.publicKey;
-    this.web3.eth.defaultAccount = '0x19574eF12Cce1DdD794Fe71B0845e6B677940ccE';
+    this.web3.eth.defaultAccount = this.authService.userValue.publicKey;
+    //this.web3.eth.defaultAccount = '0x19574eF12Cce1DdD794Fe71B0845e6B677940ccE';
     console.log('In initialize web3');
     console.log(this.web3);
   }
