@@ -48,24 +48,7 @@
 <button mat-raised-button color="warn" [disabled]="!allowVoting" (click)="takeToVoting()">
   Lets Vote!
 </button>
-<!-- Candidates  -->
-<table mat-table [dataSource]="election?.candidates" class="mat-elevation-z8">
-  <!-- Position Column -->
-  <ng-container matColumnDef="Id">
-    <th mat-header-cell *matHeaderCellDef>No.</th>
-    <td mat-cell *matCellDef="let candidate">{{ candidate.id }}</td>
-  </ng-container>
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let candidate">{{ candidate.name }}</td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedCandidateColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedCandidateColumns"></tr>
-</table>
-<!-- /Table Candidate-->
 <mat-grid-list cols="2" rowHeight="30">
   <mat-grid-tile><strong>Id</strong></mat-grid-tile>
   <mat-grid-tile>{{election?.id}}</mat-grid-tile>
@@ -83,17 +66,6 @@
   <mat-grid-tile>{{election?.status}}</mat-grid-tile>
 </mat-grid-list>
 <mat-accordion>
-  <mat-expansion-panel >
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        This is the expansion title
-      </mat-panel-title>
-      <mat-panel-description>
-        This is a summary of the content
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <p>This is the primary content of the panel.</p>
-  </mat-expansion-panel>
   <mat-expansion-panel (opened)="panelOpenState = true"
                        (closed)="panelOpenState = false">
     <mat-expansion-panel-header>
@@ -105,5 +77,23 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <p>I'm visible because I am open</p>
+      <!-- Candidates  -->
+      <table mat-table [dataSource]="election?.candidates" class="mat-elevation-z8">
+        <!-- Position Column -->
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.id }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.name }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedCandidateColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedCandidateColumns"></tr>
+      </table>
+      <!-- /Table Candidate-->
   </mat-expansion-panel>
 </mat-accordion>

@@ -15,8 +15,8 @@ export class UserVerificationService {
     return this.$http.get(this.baseApiUrl+"pendingUsers") as Observable<User[]>;
   }
 
-  setUserVerified(userId:string): Observable<ArrayBuffer>{
-    return this.$http.patch(this.baseApiUrl+"setUserVerified/"+userId,{}) as Observable<ArrayBuffer>;
+  setUserVerified(userId:string,publicKey:string): Observable<ArrayBuffer>{
+    return this.$http.patch(this.baseApiUrl+"setUserVerified/"+userId,{"publicKey":publicKey}) as Observable<ArrayBuffer>;
   }
 
   requestModification(userId:string,statusIssueMessage:string): Observable<ArrayBuffer>{

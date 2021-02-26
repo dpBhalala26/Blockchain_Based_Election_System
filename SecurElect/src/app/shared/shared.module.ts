@@ -6,6 +6,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ElectionDetailsComponent } from './election-details/election-details.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { VotingBallotComponent } from './voting-ballot/voting-ballot.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -14,12 +15,15 @@ import { VotingBallotComponent } from './voting-ballot/voting-ballot.component';
     CommonModule,
     SharedRoutingModule,
     NgMaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports:[
     NgMaterialModule,
     ElectionDetailsComponent,
     VotingBallotComponent
+    
   ]
 
 })

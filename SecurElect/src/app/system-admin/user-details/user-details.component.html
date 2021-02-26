@@ -68,6 +68,13 @@
                     </td>
                 </tr>
                 <tr>
+                    <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Public Key</mat-label>
+
+                            <input matInput name="publicKey" id="publicKey"
+                                [formControl]="myFromGroup.get('publicKey')">
+                        </mat-form-field>
+                <tr>
                     <td>
                         <mat-error *ngIf='err'> {{ err | async }} </mat-error>
                         <button mat-raised-button color="primary" (click)="verifyUser()" class="full-width"

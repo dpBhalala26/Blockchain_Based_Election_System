@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ElectionService } from 'src/app/core/elections/election.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { ElectionService } from 'src/app/core/elections/election.service';
 })
 export class ViewElectionJoinedComponent implements OnInit {
   election_id:string
-  constructor(private route:ActivatedRoute,private electionService:ElectionService,private snakeBar:MatSnackBar) { }
+  constructor(private router: Router,private route:ActivatedRoute,private electionService:ElectionService,private snakeBar:MatSnackBar) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe( params => {
@@ -27,5 +27,9 @@ export class ViewElectionJoinedComponent implements OnInit {
       });
       window.location.reload()
     })
+  }
+
+  takeToVoting(el_id){
+    this.router.navigate(["/voter/view-election-joined/",this.election_id]);
   }
 }

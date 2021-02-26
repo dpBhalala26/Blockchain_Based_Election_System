@@ -43,6 +43,10 @@ export class ViewElectionComponent implements OnInit {
     this.setErr('');
   }
 
+  takeToVoting(el_id){
+    window.alert("view-election -> voting")
+  }
+
   migrateElectionContract() {
     this.smartContractService.migrateElectionContract(
       this.election_id,
