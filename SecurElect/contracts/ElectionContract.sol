@@ -4,7 +4,12 @@ pragma experimental ABIEncoderV2;
 
 /// @title SecurElect Election Smart Contract
 contract ElectionContract {
-    enum electionStatus {initialized, readyForVoting, votingStarted, votingEnded}
+    enum electionStatus {
+        initialized,
+        readyForVoting,
+        votingStarted,
+        votingEnded
+    }
     electionStatus public currentElectionStatus;
 
     address public admin;
@@ -34,9 +39,13 @@ contract ElectionContract {
 
     // event to be emitted after successful initialization
     event contractInitialized(address indexed _from);
-    
+
     // candidates are added for the election
-    event candidatesAdded(address indexed _from, string[] candidateIds, string[] candidateNames);
+    event candidatesAdded(
+        address indexed _from,
+        string[] candidateIds,
+        string[] candidateNames
+    );
 
     // voters made eligible events
     event votersMadeEligible(address indexed _from, address[] voterAddresses);
@@ -57,21 +66,24 @@ contract ElectionContract {
     constructor() {
         admin = msg.sender;
         voters[admin].eligible = true; // Admin can also vote in the election
-        
+
         currentElectionStatus = electionStatus.initialized; // The contract is initialized.
-        
+
         // Construction Successful.
         emit contractInitialized(msg.sender);
     }
-    
+
     // candidates names are taken dynamically so that we can use the contract for different elcetions
-    function addCandidateForElection(string[] memory candidateIds, string[] memory candidateNames) private {
+    function addCandidateForElection(
+        string[] memory candidateIds,
+        string[] memory candidateNames
+    ) private {
         // Message sender must be admin because only admin can add the candidates for election
         require(
             msg.sender == admin,
             "ERROR : Admin is allowed to add candidates for the election."
         );
-        
+
         require(
             candidateIds.length == candidateNames.length,
             "ERROR : Arguments Invalid : Ids and Names arrays are not of same length"
@@ -87,7 +99,7 @@ contract ElectionContract {
             );
         }
         currentElectionStatus = electionStatus.readyForVoting; // The voting process can be started now.
-        
+
         // successfully added candidates.
         emit candidatesAdded(msg.sender, candidateIds, candidateNames);
     }
@@ -110,26 +122,30 @@ contract ElectionContract {
         //     "ERROR : This voter has voted in this election."
         // );
         // above condition is not needed to check, hence commented in order to avoid confusion
-        
+
         for (uint256 x = 0; x < voterAddresses.length; x++) {
             require(
-            !voters[voterAddresses[x]].eligible,
-            "INFO : This person is already eligible to vote."
+                !voters[voterAddresses[x]].eligible,
+                "INFO : This person is already eligible to vote."
             );
             voters[voterAddresses[x]].eligible = true; // Making voter Eligible to vote
         }
-        
+
         // successfully made voter eligible
         emit votersMadeEligible(msg.sender, voterAddresses);
     }
 
     // To initialize the voting by adding candidates and making developers eligible
-    function initializeElection(string[] memory candidateIds, string[] memory candidateNames, address[] memory voterAddresses ) public{
+    function initializeElection(
+        string[] memory candidateIds,
+        string[] memory candidateNames,
+        address[] memory voterAddresses
+    ) public {
         addCandidateForElection(candidateIds, candidateNames);
         makeVoterEligible(voterAddresses);
         emit electionInitialized(msg.sender);
     }
-    
+
     // Voting function
     function vote(string memory candidateId) public {
         // Voter can only vote after the elction has started and before ended
@@ -150,7 +166,10 @@ contract ElectionContract {
         voteSender.voted = true; // Making sure that one voter only votes once.
 
         for (uint256 j = 0; j < candidates.length; j++) {
-            if (keccak256(bytes(candidateId)) == keccak256(bytes(candidates[j].candId))) {
+            if (
+                keccak256(bytes(candidateId)) ==
+                keccak256(bytes(candidates[j].candId))
+            ) {
                 candidates[j].voteCount += 1;
                 return;
             }
@@ -168,7 +187,8 @@ contract ElectionContract {
     function getCandidateDetails()
         public
         view
-        returns (Candidate[] memory candidateDetails){
+        returns (Candidate[] memory candidateDetails)
+    {
         // Winner candidate can be get only when the election is ended.
         require(
             currentElectionStatus == electionStatus.votingEnded,
@@ -182,7 +202,8 @@ contract ElectionContract {
     function getWinnerCandidateDetails()
         public
         view
-        returns (Candidate[] memory winnerCandidates){
+        returns (Candidate[] memory winnerCandidates)
+    {
         // Winner candidate can be get only when the election is ended.
         require(
             currentElectionStatus == electionStatus.votingEnded,
@@ -207,7 +228,7 @@ contract ElectionContract {
         );
         currentElectionStatus = electionStatus.votingStarted;
 
-        emit votingProcessIntialized(msg.sender);  // successfully initialized voting process
+        emit votingProcessIntialized(msg.sender); // successfully initialized voting process
     }
 
     // changing the status of election status from 'votingStarted' to 'votingEnded'
@@ -239,7 +260,6 @@ contract ElectionContract {
             "ERROR : No voter has voted yet in the election so far."
         );
 
-
         // Loop is used to handle "TIE" condition between multiple candidates.
         // Adding candidate IDs to the winning list.
         for (uint256 l = 0; l < candidates.length; l++) {
@@ -248,6 +268,13 @@ contract ElectionContract {
             }
         }
 
-        emit votingProcessFinalized(msg.sender);  // successfully finalized voting process
+        emit votingProcessFinalized(msg.sender); // successfully finalized voting process
+    }
+
+    function getVoterByAddress(address publicKey)
+        public
+        view
+        returns (Voter memory retVoter) {
+        retVoter = voters[publicKey];
     }
 }
