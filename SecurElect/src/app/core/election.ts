@@ -8,7 +8,7 @@ export interface Election {
     createdBy:string;
     voters:{id:string,publicAddress:string}[];
     candidates:{id:string,name:string}[];
-    deploymentPost:string;
+    deploymentPort:string;
     deploymentLocation:string;
     contractMnemonics:string;
   }

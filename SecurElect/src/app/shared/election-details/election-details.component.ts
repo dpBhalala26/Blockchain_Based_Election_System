@@ -16,9 +16,11 @@ export class ElectionDetailsComponent implements OnInit {
   @Output() takeToVotingEvent = new EventEmitter();
   //@Output() AllowToStandAsCandidate = new EventEmitter();
   displayedCandidateColumns: string[] = ['Id', 'name'];
-  
   election:Election;
   allowVoting:boolean=false;
+
+  panelOpenState = false;
+  
   constructor(private electionService:ElectionService,private snakeBar: MatSnackBar,private router:Router) { }
 
   ngOnInit(): void {
@@ -31,6 +33,7 @@ export class ElectionDetailsComponent implements OnInit {
         if(this.election.startDate <= currentDate){
           this.allowVoting = true
         }
+        
       },
       (err) =>{
         console.error("election-details.getElection")
