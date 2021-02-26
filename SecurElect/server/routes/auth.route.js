@@ -118,8 +118,13 @@ async function getUserById(req, res, next) {
 router.patch("/setUserVerified/:userId", passport.authenticate("jwt", { session: false }),roleMW.validateRoleSystemAdmin ,setUserVerified);
 async function setUserVerified(req,res){
   var userId = req.params["userId"]
-  var message = await userControler.setUserVerified(userId)
-  if(message && !message.error){
+  var publicKey = req.body.publicKey
+  var message;
+  if(publicKey){
+    message = await userControler.setUserVerified(userId,publicKey)
+  }
+  
+  if(message && !message.error ){
     /* Use different responses according to error scenario */
   }
   res.json({"response":message});

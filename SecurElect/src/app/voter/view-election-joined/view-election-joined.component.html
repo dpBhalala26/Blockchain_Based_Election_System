@@ -1,4 +1,4 @@
 <p>view-election-joined works!</p>
-<button mat-raised-button color="primary" (click)="beCandidate()" class="full-width" tabindex="0">Stand as a Candidate </button>
-<button mat-raised-button color="primary" (click)="beCandidate()" class="full-width" tabindex="0">Lets Vote</button>
-<rd-election-details [election_id]="election_id" ></rd-election-details>
+Want to be a Candidate ?,<button mat-raised-button color="primary" (click)="beCandidate()" class="full-width" tabindex="0">Apply Now</button>
+<!-- <button mat-raised-button color="primary" class="full-width" tabindex="0">Lets Vote</button> -->
+<rd-election-details [election_id]="election_id" (takeToVotingEvent)="takeToVoting($event)"></rd-election-details>

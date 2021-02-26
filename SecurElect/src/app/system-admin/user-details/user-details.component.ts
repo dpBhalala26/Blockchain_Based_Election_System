@@ -59,6 +59,7 @@ export class UserDetailsComponent implements OnInit {
               value: this.user.roles[0].refKey,
               disabled: true,
             }),
+            publicKey: new FormControl(),
           });
           console.log(this.myFromGroup.getRawValue())
           //this.setErr(this.user.statusIssueMessage);
@@ -74,7 +75,7 @@ export class UserDetailsComponent implements OnInit {
     }
     console.log('verifying user', this.userId);
     const response = this.userVerificationService
-      .setUserVerified(this.userId)
+      .setUserVerified(this.userId,this.myFromGroup.get("publicKey").value)
       .subscribe(
         (d) => {
           this.openSnackBar('User status updated ', 'Successfully !');
