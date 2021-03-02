@@ -43,4 +43,11 @@ export class ElectionDetailsComponent implements OnInit {
     window.alert("Taking to voting page");
     this.takeToVotingEvent.emit(this.election_id);
   }
+
+  tempRedirect(){
+    //window.alert("button pressed: ");
+    //console.log(this.election_id);
+    var tempEId = this.election_id;
+    this.router.navigate(["/voter/cast-vote/",tempEId]);
+  }
 }

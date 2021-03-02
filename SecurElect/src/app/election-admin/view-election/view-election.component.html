@@ -3,14 +3,14 @@
 </button>
 <!-- <rd-election-details [election_id]="election_id" (takeToVotingEvent)="takeToVotingBallot($event)"></rd-election-details> -->
 <rd-election-details [election_id]="election_id" (takeToVotingEvent)="takeToVoting($event)"></rd-election-details>
-<button
+<!-- <button
   mat-icon-button
   class="example-icon favorite-icon logo"
   routerLink="/election-admin/voting-dashboard"
   routerLinkActive="active-link"
 >
   <mat-icon>Let's Vote</mat-icon>
-</button>
+</button> -->
 <mat-card class="view-election-buttons-card">
   <form action="" method="post" [formGroup]="pkGroup">
     <table class="full-width">

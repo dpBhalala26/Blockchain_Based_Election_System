@@ -45,7 +45,12 @@
       </mat-card>
 </section> -->
 
+<!--
 <button mat-raised-button color="warn" [disabled]="!allowVoting" (click)="takeToVoting()">
+  Lets Vote!
+</button>
+-->
+<button mat-raised-button color="warn" (click)="tempRedirect()">
   Lets Vote!
 </button>
 
@@ -72,9 +77,9 @@
       <mat-panel-title>
         Candidates
       </mat-panel-title>
-      <mat-panel-description>
+      <!-- <mat-panel-description>
         Currently There are {{election?.candidates ? '0' : election.candidates.length}}
-      </mat-panel-description>
+      </mat-panel-description> -->
     </mat-expansion-panel-header>
     <p>I'm visible because I am open</p>
       <!-- Candidates  -->
