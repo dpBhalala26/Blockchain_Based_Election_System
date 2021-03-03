@@ -30,6 +30,6 @@ export class ViewElectionJoinedComponent implements OnInit {
   }
 
   takeToVoting(el_id){
-    this.router.navigate(["/voter/view-election-joined/",this.election_id]);
+    this.router.navigate(["/voter/cast-vote/",this.election_id]);
   }
 }
