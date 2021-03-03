@@ -45,6 +45,8 @@ export class ViewElectionComponent implements OnInit {
 
   takeToVoting(el_id){
     window.alert("view-election -> voting")
+    this.router.navigate(["/voter/voting-dashboard/",this.election_id]);
+    
   }
 
   migrateElectionContract() {

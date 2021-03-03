@@ -73,13 +73,13 @@
         Candidates
       </mat-panel-title>
       <mat-panel-description>
-        Currently There are {{election?.candidates ? '0' : election.candidates.length}}
+        Currently There are {{election?.candidates ? election.candidates.length : '0'}} Candidates
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <p>I'm visible because I am open</p>
+    <p></p>
       <!-- Candidates  -->
       <table mat-table [dataSource]="election?.candidates" class="mat-elevation-z8">
-        <!-- Position Column -->
+        <!-- Id Column -->
         <ng-container matColumnDef="Id">
           <th mat-header-cell *matHeaderCellDef>No.</th>
           <td mat-cell *matCellDef="let candidate">{{ candidate.id }}</td>
@@ -95,5 +95,42 @@
         <tr mat-row *matRowDef="let row; columns: displayedCandidateColumns"></tr>
       </table>
       <!-- /Table Candidate-->
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="panel2OpenState = true"
+                       (closed)="panel2OpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Result
+      </mat-panel-title>
+      <mat-panel-description>
+        Result of Election
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p></p>
+      <!-- Result  -->
+      <table mat-table [dataSource]="electionResult" class="mat-elevation-z8">
+        <!-- Position Column -->
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.id }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.uname }}</td>
+        </ng-container>
+
+        <!-- Votes Column -->
+        <ng-container matColumnDef="voteCount">
+          <th mat-header-cell *matHeaderCellDef>Vote Count</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.voteCount }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedResultColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedResultColumns"></tr>
+      </table>
+      <!-- /Table Result-->
   </mat-expansion-panel>
 </mat-accordion>
