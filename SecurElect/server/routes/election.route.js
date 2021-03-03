@@ -152,7 +152,7 @@ async function joinElection(req, res) {
   const electionId = req.params["eid"];//req.body["electionId"];
   
   const voterId = req.user._id
-  var publicAddress = req.user.publicKeyAddress
+  var publicAddress = req.user.publicKey
   /**testing phase */
   if(!publicAddress){
     publicAddress="None";

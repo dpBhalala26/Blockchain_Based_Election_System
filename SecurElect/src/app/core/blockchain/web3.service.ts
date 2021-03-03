@@ -110,6 +110,7 @@ export class Web3Service {
   private sendTxForContractFun(funAbi, privateKey) {
     var details = {
       nonce: this.getNonce(),
+      //nonce: this.conNonce,
       gasPrice: this.web3.utils.toHex(this.web3.utils.toWei('47', 'gwei')),
       gas: 300000,
       to: this.contractAddress,
@@ -153,6 +154,7 @@ export class Web3Service {
     voterAddresses,
     privateKey
   ) {
+    console.log("In web3, migrateElection:");
     const funAbi = this.electionContract.methods
       .initializeElection(candIds, candNames, voterAddresses)
       .encodeABI();
@@ -171,6 +173,8 @@ export class Web3Service {
   }
 
   public castVote(candId, privateKey) {
+    console.log("in web3: cast vote: canId: ");
+    console.log(candId);
     const funAbi = this.electionContract.methods.vote(candId).encodeABI();
     console.log('In web3, castVote: funAbi is:');
     console.log(funAbi);

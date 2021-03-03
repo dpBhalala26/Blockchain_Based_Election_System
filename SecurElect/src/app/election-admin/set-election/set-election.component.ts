@@ -73,4 +73,12 @@ export class SetElectionComponent implements OnInit {
       return ""
     }
   }
+  getEndDateErrorMessage(){
+    if(this.electionGroup.get('endDate').hasError('required')){
+      return "end Date is Required"
+    }
+    else{
+      return ""
+    }
+  }
 }

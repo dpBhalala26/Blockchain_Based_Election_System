@@ -53,9 +53,9 @@ export class VotingBallotComponent implements OnInit {
   vote(candidateId: string) {
     var privateKeyValue = this.pkGroup.get('privateKey').value;
     if(this.pkGroup.valid && privateKeyValue){
-      window.alert(
-        'voting for in ' + this.election_id + ' for candidate ' + candidateId
-      );
+      // window.alert(
+      //  'voting for in ' + this.election_id + ' for candidate ' + candidateId
+      // );
       this.smartContractService.castVote(this.election_id, candidateId,privateKeyValue);
     }
     else{

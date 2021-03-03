@@ -16,7 +16,7 @@ export class SmartContractService {
   election: Election;
   accountAddress: string;
   serviceStatus: string = '';
-  privateKey ='';
+  privateKey = '';
 
   constructor(
     private web3Service: Web3Service,
@@ -56,27 +56,35 @@ export class SmartContractService {
       //   '0xFEc985Cbb7880Ca4F2C55A70429b194E1dC37Ee5',
       //   '0x6E3986DfF67302cEb87765CE2Cb70d49ac9C4233',
       // ];
-      this.electionService.getElectionForTesting(electionId).subscribe(async (data) => { this.election = data['response']; 
-        console.log("thisElection: ");
-      console.log(this.election);
-      console.log(this.election.candidates);
-      const candIds = this.election.candidates.map( cnd => cnd.id);
-      const candNames = this.election.candidates.map( cnd => cnd.name);
-      console.log(this.election.voters);
-      const voterAddresses = this.election.voters.map( vtr => vtr.publicAddress);
-      //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
-      await this.web3Service.migrateElectionContract(
-        candIds,
-        candNames,
-        voterAddresses,
-        privateKey
-      );
-      // service api call to change state and description of election => uninitiazed to beforestart (string)
-      // return string  ("Success") or throwError
-      this.setServiceStatus('Sccess in migrateElectionContract');
-      console.log(this.serviceStatus);
-      return 'Success';});
-      
+      await this.electionService
+        .getElection(electionId)
+        .subscribe( (data) => {
+          this.election = data['response'];
+          console.log('thisElection: ');
+          console.log(this.election);
+          console.log(this.election.candidates);
+          const candIds = this.election.candidates.map((cnd) => cnd.id);
+          const candNames = this.election.candidates.map((cnd) => cnd.name);
+          console.log(this.election.voters);
+          const voterAddresses = this.election.voters.map(
+            (vtr) => vtr.publicAddress
+          );
+          console.log(candIds);
+          console.log(candNames);
+          console.log(voterAddresses);
+          //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
+           this.web3Service.migrateElectionContract(
+            candIds,
+            candNames,
+            voterAddresses,
+            privateKey
+          );
+          // service api call to change state and description of election => uninitiazed to beforestart (string)
+          // return string  ("Success") or throwError
+          this.setServiceStatus('Sccess in migrateElectionContract');
+          console.log(this.serviceStatus);
+          return 'Success';
+        });
     } catch (err) {
       console.log('ERROR in migrateElectionContract : error: ' + err);
       return throwError(err);
@@ -168,8 +176,8 @@ export class SmartContractService {
     // return string ("Success") or throwError
     try {
       //const privateKey = "1d4c98e4fb04890e0c9d63a75ec3fc7b526893e55334c50d0d9ebc12dddae566";
-      const candId = 'c11';
-      await this.web3Service.castVote(candId, privateKey);
+      //const candId = 'c11';
+      await this.web3Service.castVote(candidateId, privateKey);
       this.setServiceStatus('Sccess in castVote');
       console.log(this.serviceStatus);
       return 'Success';
