@@ -63,10 +63,6 @@ export class ViewElectionComponent implements OnInit {
     this.smartContractService.initializeVotingProcess(this.election_id, this.pkGroup.get('privateKey').value);
   }
 
-  castVote() {
-    this.smartContractService.castVote(this.election_id, 'c11', this.pkGroup.get('privateKey').value);
-  }
-
   finalizeVotingProcess() {
     this.smartContractService.finalizeVotingProcess(this.election_id, this.pkGroup.get('privateKey').value);
   }

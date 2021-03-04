@@ -85,20 +85,6 @@
           <button
             mat-raised-button
             color="primary"
-            (click)="castVote()"
-            class="full-width"
-            tabindex="0"
-          >
-            castVote
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <mat-error *ngIf="err"> {{ err | async }} </mat-error>
-          <button
-            mat-raised-button
-            color="primary"
             (click)="finalizeVotingProcess()"
             class="full-width"
             tabindex="0"
