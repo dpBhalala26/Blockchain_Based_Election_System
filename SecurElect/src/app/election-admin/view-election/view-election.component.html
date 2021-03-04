@@ -18,30 +18,37 @@
         <td>
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Enter your Private Key</mat-label>
-            <input
-              matInput
-              name="privateKey"
-              id="privateKey"
-              [type]="hide ? 'password' : 'text'"
-              [formControl]="pkGroup.get('privateKey')"
-              required
-            />
-            <button
-              mat-icon-button
-              matSuffix
-              (click)="hide = !hide"
-              [attr.aria-label]="'Hide privateKey'"
-              [attr.aria-pressed]="hide"
-            >
+            <input matInput name="privateKey" id="privateKey" [type]="hide ? 'password' : 'text'"
+              [formControl]="pkGroup.get('privateKey')" required />
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide privateKey'"
+              [attr.aria-pressed]="hide">
               <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
             </button>
             <mat-error *ngIf="pkGroup.get('privateKey').invalid">{{
               getPrivateKeyErrorMessage()
-            }}</mat-error>
-            <mat-hint
-              >eg.
-              f60aa96953bb54027c49e05c1f4f20b74abfa7283427e78d29fd857d29e55009</mat-hint
-            >
+              }}</mat-error>
+            <mat-hint>eg.
+              f60aa96953bb54027c49e05c1f4f20b74abfa7283427e78d29fd857d29e55009</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Enter Nonce</mat-label>
+            <input matInput name="nonce" id="nonce" placeholder='0' [formControl]="pkGroup.get('nonce')" required>
+            <mat-error *ngIf="pkGroup.get('privateKey').invalid">{{
+              getNonceErrorMessage()
+              }}</mat-error>
           </mat-form-field>
         </td>
       </tr>
@@ -54,13 +61,7 @@
       <tr>
         <td>
           <mat-error *ngIf="err"> {{ err | async }} </mat-error>
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="migrateElectionContract()"
-            class="full-width"
-            tabindex="0"
-          >
+          <button mat-raised-button color="primary" (click)="migrateElectionContract()" class="full-width" tabindex="0">
             migrateElectionContract
           </button>
         </td>
@@ -68,13 +69,7 @@
       <tr>
         <td>
           <mat-error *ngIf="err"> {{ err | async }} </mat-error>
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="initializeVotingProcess()"
-            class="full-width"
-            tabindex="0"
-          >
+          <button mat-raised-button color="primary" (click)="initializeVotingProcess()" class="full-width" tabindex="0">
             initializeVotingProcess
           </button>
         </td>
@@ -82,27 +77,15 @@
       <tr>
         <td>
           <mat-error *ngIf="err"> {{ err | async }} </mat-error>
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="finalizeVotingProcess()"
-            class="full-width"
-            tabindex="0"
-          >
+          <button mat-raised-button color="primary" (click)="finalizeVotingProcess()" class="full-width" tabindex="0">
             finalizeVotingProcess
           </button>
         </td>
       </tr>
-      <tr>
+      <!-- <tr>
         <td>
           <mat-error *ngIf="err"> {{ err | async }} </mat-error>
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="getElectionsResults()"
-            class="full-width"
-            tabindex="0"
-          >
+          <button mat-raised-button color="primary" (click)="getElectionsResults()" class="full-width" tabindex="0">
             getElectionsResults
           </button>
         </td>
@@ -110,17 +93,12 @@
       <tr>
         <td>
           <mat-error *ngIf="err"> {{ err | async }} </mat-error>
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="getWinningCandidatesDetails()"
-            class="full-width"
-            tabindex="0"
-          >
+          <button mat-raised-button color="primary" (click)="getWinningCandidatesDetails()" class="full-width"
+            tabindex="0">
             getWinningCandidatesDetails
           </button>
         </td>
-      </tr>
+      </tr> -->
       <tr>
         <br /><br /><br /><br />
       </tr>

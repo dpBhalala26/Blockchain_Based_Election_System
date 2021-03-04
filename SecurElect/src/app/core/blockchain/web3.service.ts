@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import Common from 'ethereumjs-common';
+import { delay } from 'rxjs/operators';
 
 const Web3 = require('web3');
 const EthereumTx = require('ethereumjs-tx').Transaction;
@@ -76,8 +77,8 @@ export class Web3Service {
     return this.conNonce;
   }
 
-  public convertArtifactsToContract(artifacts) {
-    this.web3.eth.getTransactionCount(
+  public async convertArtifactsToContract(artifacts) {
+    await this.web3.eth.getTransactionCount(
       this.web3.eth.defaultAccount,
       (err, nonce) => {
         console.log('nonce value is ');
@@ -107,10 +108,11 @@ export class Web3Service {
     return window.ethereum.request({ method: 'eth_requestAccounts' }).then((arr) => { console.log("Getting account"); console.log(arr); return arr[0];});
   } */
 
-  private sendTxForContractFun(funAbi, privateKey) {
+  private sendTxForContractFun(funAbi, privateKey, nonceArg) {
     var details = {
-      nonce: this.getNonce(),
+      //nonce: this.getNonce(),
       //nonce: this.conNonce,
+      nonce: this.web3.utils.toHex(nonceArg),
       gasPrice: this.web3.utils.toHex(this.web3.utils.toWei('47', 'gwei')),
       gas: 300000,
       to: this.contractAddress,
@@ -135,12 +137,15 @@ export class Web3Service {
       .sendSignedTransaction(rawData)
       .on('transactionHash', (hash) => {
         console.log('After sending: Transaction Hash is: ', hash);
+        window.alert('Transaction Successful: ' + hash);
       })
       .on('receipt', (receipt) => {
         console.log('After sending: Transaction Receipt is: ', receipt);
       })
       .on('error', (err) => {
         console.log('ERROR After sending: Error is: ', err);
+        window.alert('Error occured: ' + err);
+        return throwError(err);
       });
   }
   public getAccountAddress() {
@@ -152,42 +157,43 @@ export class Web3Service {
     candIds,
     candNames,
     voterAddresses,
-    privateKey
+    privateKey,
+    nonce
   ) {
-    console.log("In web3, migrateElection:");
+    console.log('In web3, migrateElection:');
     const funAbi = this.electionContract.methods
       .initializeElection(candIds, candNames, voterAddresses)
       .encodeABI();
     console.log('In web3, migrateElection: funAbi is:');
     console.log(funAbi);
-    this.sendTxForContractFun(funAbi, privateKey);
+    this.sendTxForContractFun(funAbi, privateKey, nonce);
   }
 
-  public initializeVotingProcess(privateKey) {
+  public initializeVotingProcess(privateKey, nonce) {
     const funAbi = this.electionContract.methods
       .initializeVotingProcess()
       .encodeABI();
     console.log('In web3, initializeVotingProcess: funAbi is:');
     console.log(funAbi);
-    this.sendTxForContractFun(funAbi, privateKey);
+    this.sendTxForContractFun(funAbi, privateKey, nonce);
   }
 
-  public castVote(candId, privateKey) {
-    console.log("in web3: cast vote: canId: ");
+  public castVote(candId, privateKey, nonce) {
+    console.log('in web3: cast vote: canId: ');
     console.log(candId);
     const funAbi = this.electionContract.methods.vote(candId).encodeABI();
     console.log('In web3, castVote: funAbi is:');
     console.log(funAbi);
-    this.sendTxForContractFun(funAbi, privateKey);
+    this.sendTxForContractFun(funAbi, privateKey, nonce);
   }
 
-  public finalizeVotingProcess(privateKey) {
+  public finalizeVotingProcess(privateKey, nonce) {
     const funAbi = this.electionContract.methods
       .finalizeVotingProcess()
       .encodeABI();
     console.log('In web3, finalizeVotingProcess: funAbi is:');
     console.log(funAbi);
-    this.sendTxForContractFun(funAbi, privateKey);
+    this.sendTxForContractFun(funAbi, privateKey, nonce);
   }
 
   public getElectionsResults() {
@@ -198,6 +204,9 @@ export class Web3Service {
     // console.log(funAbi);
     // this.sendTxForContractFun(funAbi, privateKey);
     console.log('In web3, getElectionsResults:');
+    // while(this.electionContract === undefined){
+    //   delay(4);
+    // }
     return this.electionContract.methods
       .getCandidateDetails()
       .call({ from: this.web3.eth.defaultAccount })

@@ -39,14 +39,17 @@ export class ViewElectionComponent implements OnInit {
         Validators.minLength(64),
         Validators.pattern('[0-9A-Fa-f]{64}'),
       ]),
+      nonce: new FormControl(0, [
+        Validators.required,
+        Validators.pattern('[0-9]+'),
+      ]),
     });
     this.setErr('');
   }
 
-  takeToVoting(el_id){
-    window.alert("view-election -> voting")
-    this.router.navigate(["/voter/voting-dashboard/",this.election_id]);
-    
+  takeToVoting(el_id) {
+    window.alert('view-election -> voting');
+    this.router.navigate(['/voter/voting-dashboard/', this.election_id]);
   }
 
   migrateElectionContract() {
@@ -55,16 +58,25 @@ export class ViewElectionComponent implements OnInit {
       '',
       '',
       '',
-      this.pkGroup.get('privateKey').value
+      this.pkGroup.get('privateKey').value,
+      this.pkGroup.get('nonce').value
     );
   }
 
   initializeVotingProcess() {
-    this.smartContractService.initializeVotingProcess(this.election_id, this.pkGroup.get('privateKey').value);
+    this.smartContractService.initializeVotingProcess(
+      this.election_id,
+      this.pkGroup.get('privateKey').value,
+      this.pkGroup.get('nonce').value
+    );
   }
 
   finalizeVotingProcess() {
-    this.smartContractService.finalizeVotingProcess(this.election_id, this.pkGroup.get('privateKey').value);
+    this.smartContractService.finalizeVotingProcess(
+      this.election_id,
+      this.pkGroup.get('privateKey').value,
+      this.pkGroup.get('nonce').value
+    );
   }
 
   getElectionsResults() {
@@ -97,7 +109,7 @@ export class ViewElectionComponent implements OnInit {
   }
 
   hide = true;
-  getPrivateKeyErrorMessage(){
+  getPrivateKeyErrorMessage() {
     if (this.pkGroup.get('privateKey').hasError('required')) {
       return 'You must enter a private key';
     } else if (this.pkGroup.get('privateKey').hasError('minlength')) {
@@ -106,6 +118,15 @@ export class ViewElectionComponent implements OnInit {
       return 'Length of private key is 64 letters';
     } else if (this.pkGroup.get('privateKey').hasError('pattern')) {
       return 'Private Key contains only 0-9, A-F and a-f';
+    }
+    return '';
+  }
+
+  getNonceErrorMessage() {
+    if (this.pkGroup.get('nonce').hasError('required')) {
+      return 'You must enter a nonce value';
+    } else if (this.pkGroup.get('nonce').hasError('pattern')) {
+      return 'Nonce must be a number.';
     }
     return '';
   }
