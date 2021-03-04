@@ -62,7 +62,7 @@
         <td>
           <mat-error *ngIf="err"> {{ err | async }} </mat-error>
           <button mat-raised-button color="primary" (click)="migrateElectionContract()" class="full-width" tabindex="0">
-            migrateElectionContract
+            Initialize Election
           </button>
         </td>
       </tr>
@@ -70,7 +70,7 @@
         <td>
           <mat-error *ngIf="err"> {{ err | async }} </mat-error>
           <button mat-raised-button color="primary" (click)="initializeVotingProcess()" class="full-width" tabindex="0">
-            initializeVotingProcess
+            Initialize Voting Process
           </button>
         </td>
       </tr>
@@ -78,7 +78,7 @@
         <td>
           <mat-error *ngIf="err"> {{ err | async }} </mat-error>
           <button mat-raised-button color="primary" (click)="finalizeVotingProcess()" class="full-width" tabindex="0">
-            finalizeVotingProcess
+            Finalize Voting Process
           </button>
         </td>
       </tr>
