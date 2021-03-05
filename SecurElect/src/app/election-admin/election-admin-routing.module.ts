@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ElectionDetailsComponent } from '../shared/election-details/election-details.component';
 import { ElectionsComponent } from './elections/elections.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './../home/home.component';
 import { ManageVotersComponent } from './manage-voters/manage-voters.component';
 import { SetElectionComponent } from './set-election/set-election.component';
 import { ViewElectionComponent } from './view-election/view-election.component';
