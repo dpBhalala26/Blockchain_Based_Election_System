@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ElectionDetailsComponent } from '../shared/election-details/election-details.component';
 import { ElectionsComponent } from './elections/elections.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './../home/home.component';
 import { ManageVotersComponent } from './manage-voters/manage-voters.component';
+import { SetElectionComponent } from './set-election/set-election.component';
+import { ViewElectionComponent } from './view-election/view-election.component';
 import { VoterDetailsComponent } from './voter-details/voter-details.component';
+import { VotingDashboardComponent } from './voting-dashboard/voting-dashboard.component';
 
 const routes: Routes = [
   {
@@ -23,9 +25,14 @@ const routes: Routes = [
     component: ElectionsComponent,
   },
   {
-    path: 'election-detail/:election_id',
+    path: 'view-election/:election_id',
     pathMatch: 'full',
-    component: ElectionDetailsComponent,
+    component: ViewElectionComponent,
+  },
+  {
+    path: 'set-election',
+    pathMatch: 'full',
+    component: SetElectionComponent,
   },
   {
     path: 'manage-voters',
@@ -36,6 +43,11 @@ const routes: Routes = [
     path: 'voter-details/:voter_id',
     pathMatch: 'full',
     component: VoterDetailsComponent,
+  },
+  {
+    path: 'voting-dashboard/:election_id',
+    pathMatch: 'full',
+    component: VotingDashboardComponent,
   },
   {
     path: '**',

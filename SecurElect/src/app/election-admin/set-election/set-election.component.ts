@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 import { BehaviorSubject } from 'rxjs';
+import { ElectionService } from 'src/app/core/elections/election.service';
 
 @Component({
   selector: 'rd-set-election',
@@ -12,15 +14,15 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SetElectionComponent implements OnInit {
   
-  @Output() electionAddeded = new EventEmitter<any>();
   electionGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
+    title: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required]),
     startDate: new FormControl(new Date().toISOString().slice(0, -1), [Validators.required]),
     endDate: new FormControl(new Date().toISOString().slice(0, -1), [Validators.required]),
   });
 
   err: BehaviorSubject<string>;
-  constructor(private regSnakeBar: MatSnackBar) {}
+  constructor(private regSnakeBar: MatSnackBar,private electionService:ElectionService,private router:Router) {}
 
   ngOnInit(): void {
     this.err = new BehaviorSubject('');
@@ -40,8 +42,15 @@ export class SetElectionComponent implements OnInit {
     //   },
     //   (e) => this.setErr('Register failed. Please try again.')
     // );
+    this.electionService.setElection(election).subscribe(
+      (data)=>{
+        console.log("created election",data);
+        this.router.navigate(["election-admin/elections"]);
+      },
+      (err)=>{
+
+      });
     this.openSnackBar('election Addeded ', 'Successfully !');
-    this.electionAddeded.emit(election)
   }
 
   openSnackBar(message: string, action: string) {
@@ -59,6 +68,14 @@ export class SetElectionComponent implements OnInit {
   getStartDateErrorMessage(){
     if(this.electionGroup.get('startDate').hasError('required')){
       return "start Date is Required"
+    }
+    else{
+      return ""
+    }
+  }
+  getEndDateErrorMessage(){
+    if(this.electionGroup.get('endDate').hasError('required')){
+      return "end Date is Required"
     }
     else{
       return ""

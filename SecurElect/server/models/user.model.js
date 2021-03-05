@@ -23,8 +23,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    publicKey:{
+    publicKeyAddress:{
         type: String
+    },
+    publicKey:{
+        type: String,
+        default: "0x"
     },
     status:{
         type: String,

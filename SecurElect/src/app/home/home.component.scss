@@ -1,0 +1,24 @@
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+}
+
+img{
+    height: 100vh;
+    width: 100%;
+    z-index: -1;
+}
+
+h1{
+    position: absolute;
+    top: 100px;
+    left: 65%;
+    transform: translateX(-50%);
+    color: black;
+    font-size: 40px;
+    text-decoration: underline;
+    font-weight: 500;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}

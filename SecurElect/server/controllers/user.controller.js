@@ -31,6 +31,7 @@ async function user_update(userId, user){
 }
 
 async function verifyAndGetUserByCredentials(email, pwd){
+    console.log("verifying",email)
     let user = await User.findOne({email:email});
     console.log(email)
     console.log(user)
@@ -76,8 +77,6 @@ async function getUserByID(id){
     }
 }
 
-
-
 async function getAllPendingUsers(){
     let user_list = await User.find({$or:[{"status":"pending"},{"status":"modified"}]});
     if( user_list ){
@@ -95,14 +94,15 @@ async function getAllPendingUsers(){
     }
 }
 
-async function setUserVerified(userId){
+async function setUserVerified(userId,public_Key){
     /*Check before changing */
     usr = await User.findById(userId)
-    console.log(usr)
+    console.log("setUserVerified",usr)
     if(usr.status == "pending" || usr.status == "modified" ){
         const updUser = await User.findByIdAndUpdate( userId, {
             status:"verified",
-            statusIssueMessage:"Verified User"
+            statusIssueMessage:"Verified User",
+            publicKey:public_Key
         }, {new: true});
         console.log(updUser, `  : 2 in setUserVerified of user controller`);
         return "status updated";
@@ -125,6 +125,13 @@ async function setUserUnVerifiable(userId,statusIssueMsg){
         return "invalid request";
     }
 }
+
+
+function isRoleRefKeyValid(role){
+    /* Verify here */
+    return true
+}
+
 module.exports = {
     user_insert,
     verifyAndGetUserByCredentials,
@@ -134,5 +141,6 @@ module.exports = {
     delete_user,
     getAllPendingUsers,
     setUserVerified,
-    setUserUnVerifiable
+    setUserUnVerifiable,
+    isRoleRefKeyValid
 };

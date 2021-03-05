@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Election } from 'src/app/core/election';
-
-const ELECTION_DATA: Election[] = [
-  {sr_no: 1, name: 'Tech Lead', start: new Date("2021-01-22"), end: new Date("2021-01-23")},
-];
+import { ElectionService } from 'src/app/core/elections/election.service';
 
 @Component({
   selector: 'rd-elections-joined',
@@ -12,18 +10,25 @@ const ELECTION_DATA: Election[] = [
 })
 export class ElectionsJoinedComponent implements OnInit {
 
-  displayedColumns: string[] = ['sr_no', 'name', 'start', 'end'];
-  electionDataSource:any = ELECTION_DATA;
-
-  constructor() { }
+  displayedColumns: string[] = ['Id', 'name', 'start', 'end','action'];
+  electionDataSource:any ;    //= ELECTION_DATA;
+  electionDataSource$:Observable<any>;
+  electionIdToJoin:string;
+  constructor(private electionService:ElectionService) { }
 
   ngOnInit(): void {
+    // this.electionService.getAllElections().subscribe( (data) =>{
+    //   //let elections:Election[] ;
+    //   this.electionDataSource = data["response"];
+    //   console.log(data["response"])
+    // })
+    this.electionService.getAllElectionsJoinedInBehaviourSubject();
+    this.electionDataSource$ = this.electionService.elections;
   }
 
-  addElection(election){
-    election.position = "2";
-    //this.electionDataSource.push(election);
-    console.log("got election",election)
+  joinElection():void {
+    var voterId = null
+    this.electionService.joinElection(this.electionIdToJoin,voterId)
+    window.alert('Joining Election!'+this.electionIdToJoin);
   }
-
 }

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Election } from 'src/app/core/election';
+import { ElectionService } from 'src/app/core/elections/election.service';
 
 
-const ELECTION_DATA: Election[] = [
-  {sr_no: 1, name: 'Tech Lead', start: new Date("2021-01-22"), end: new Date("2021-01-23")},
-];
+// const ELECTION_DATA: Election[] = [
+//   {sr_no: 1, name: 'Tech Lead', start: new Date("2021-01-22"), end: new Date("2021-01-23")},
+// ];
 
 @Component({
   selector: 'rd-elections',
@@ -13,16 +14,21 @@ const ELECTION_DATA: Election[] = [
 })
 export class ElectionsComponent implements OnInit {
 
-  displayedColumns: string[] = ['sr_no', 'name', 'start', 'end','action'];
-  electionDataSource:any = ELECTION_DATA;
+  displayedColumns: string[] = ['Id', 'name', 'start', 'end','action'];
+  electionDataSource:any ;    //= ELECTION_DATA;
 
-  constructor() { }
+  constructor(private electionService:ElectionService) { }
 
   ngOnInit(): void {
+    this.electionService.getAllElections().subscribe( (data) =>{
+      //let elections:Election[] ;
+      this.electionDataSource = data["response"];
+      console.log(data["response"])
+  })
   }
-  
+  /**Useless */
   addElection(election){
-    election.position = "2";
+    //election.position = "2";
     //this.electionDataSource.push(election);
     console.log("got election",election)
   }

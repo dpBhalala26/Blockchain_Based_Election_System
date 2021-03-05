@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ElectionService } from 'src/app/core/elections/election.service';
 
 @Component({
   selector: 'rd-view-election-joined',
@@ -8,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ViewElectionJoinedComponent implements OnInit {
   election_id:string
-  constructor(private route:ActivatedRoute) { }
+  constructor(private router: Router,private route:ActivatedRoute,private electionService:ElectionService,private snakeBar:MatSnackBar) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe( params => {
@@ -19,5 +21,15 @@ export class ViewElectionJoinedComponent implements OnInit {
   beCandidate(){
     console.log("requesting to be a candidate");
     //call election service and request as a candidate
+    this.electionService.joinElectionAsCandidate(this.election_id,"").subscribe((data)=>{
+      this.snakeBar.open("Now You Are A Candidate","",{
+        duration: 2000,
+      });
+      window.location.reload()
+    })
+  }
+
+  takeToVoting(el_id){
+    this.router.navigate(["/voter/cast-vote/",this.election_id]);
   }
 }

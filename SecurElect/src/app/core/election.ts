@@ -1,6 +1,14 @@
 export interface Election { 
-    sr_no: number;
-    name: string;
-    start: Date;
-    end: Date;
+    id:string
+    title:string;
+    description: string;
+    startDate: Date;
+    endDate: Date;
+    status:string;
+    createdBy:string;
+    voters:{id:string,publicAddress:string}[];
+    candidates:{id:string,name:string}[];
+    deploymentPort:string;
+    deploymentLocation:string;
+    contractMnemonics:string;
   }

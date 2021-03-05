@@ -8,7 +8,7 @@ const roleMW = require("../middleware/roleMW");
 
 const passport = require("../middleware/passport");
 const app = require("../config/express");
-const { request, response } = require("../config/express");
+//const { request, response } = require("../config/express");
 
 const router = express.Router();
 
@@ -29,32 +29,27 @@ function sendUser(req, res) {
   console.log(user, ` :: In sendUser() :::::::::::::::::::::::::::::::::::::::::::::: `);
   const token = null;
   if (user == null) {
-    throw new Error("Error from login func in auth.route.js :: User Not valid");
+    throw new Error("Error from auth.route.js: sendUser() :: User Not valid");
   }
   res.json({ user, token });
 }
 
 router.post("/register", asyncHandler(user_insert), login);
-// localhost:xxxx/api/auth/register
+// localhost:****/api/auth/register
 async function user_insert(req, res, next) {
   const user = req.body;
-  
-  console.log(`registering user :: `, user);
-  if( user.role!=null && !isRoleRefKeyValid(user.roles[0])){
-    console.log(`registeration error :: `, user);
-    next();
+  console.log(`auth.route.js: register() :: `, user);
+  if( user.role!=null && !userControler.isRoleRefKeyValid(user.roles[0])){
+    console.log(`registeration error :: invalid Role Referance Key `, user);
+    res.json({"error":"invalid Role Referance Key"})
   }
   req.user = await userControler.user_insert(user);
   next();
 }
-function isRoleRefKeyValid(role){
-  /* Verify here */
-  return true
-}
-//router.post('/login', passport.authenticate('local', {session: false}), login);
+// localhost:****/api/auth/login
 router.post("/login", asyncHandler(verifyAndGetUserByCredentials), login);
 router.post("/old_pwd_validate", asyncHandler(verifyAndGetUserByCredentials), sendUser);
-// localhost:xxxx/api/auth/login
+
 async function verifyAndGetUserByCredentials(req, res, next) {
   const user = req.body;
   console.log(`Verifying the in user :: `, user);
@@ -64,15 +59,11 @@ async function verifyAndGetUserByCredentials(req, res, next) {
 
 router.get("/findJWT", passport.authenticate("jwt", { session: false }), login);
 
-
-
 router.get("/getuser/:email", asyncHandler(get_user_by_email), sendUser);
 async function get_user_by_email(req, res, next) {
   const reqEmail = req.params.email;
   console.log(`Verifying the in user in getUser :: `, reqEmail);
   req.user = await userControler.get_user_by_email(reqEmail);
-  //const retuser = req.user;
-  //res.json(retuser);
   next();
 }
 
@@ -105,27 +96,6 @@ async function delete_the_user(req, res, next) {
   next();
 }
 
-
-
-
-/*
-router.post('/login', (req, res) => {
-    passport.authenticate('local', function (err, user, info) {     
-        console.log(user); 
-        if (err) {
-            return res.status(401).json(err);
-        }
-        if (user) {
-            const token = authController.generateToken(user);
-            return res.status(200).json({
-                "token": token
-            });
-        } else {
-            res.status(401).json(info);
-        }
-    })(req, res)
-});*/
-
 function test(req, res, next) {
   console.log(req.user);
 }
@@ -141,8 +111,6 @@ async function getUserById(req, res, next) {
   const userId = req.params["userId"];
   console.log(`Verifying the in user in getUser :: `, userId);
   req.user = await userControler.getUserByID(userId);
-  //const retuser = req.user;
-  //res.json(retuser);
   next();
 }
 
@@ -150,8 +118,13 @@ async function getUserById(req, res, next) {
 router.patch("/setUserVerified/:userId", passport.authenticate("jwt", { session: false }),roleMW.validateRoleSystemAdmin ,setUserVerified);
 async function setUserVerified(req,res){
   var userId = req.params["userId"]
-  var message = await userControler.setUserVerified(userId)
-  if(message && !message.error){
+  var publicKey = req.body.publicKey
+  var message;
+  if(publicKey){
+    message = await userControler.setUserVerified(userId,publicKey)
+  }
+  
+  if(message && !message.error ){
     /* Use different responses according to error scenario */
   }
   res.json({"response":message});
@@ -162,9 +135,7 @@ router.post("/setUserUnVerifiable/:userId",passport.authenticate("jwt", { sessio
 async function setUserUnVerifiable(req, res) {
   var userId = req.params["userId"]
   var statusIssueMessage = req.body.statusIssueMessage
-  //console.log("msg",statusIssueMessage,"req.body ",req.body)
   response_msg = await userControler.setUserUnVerifiable(userId,statusIssueMessage);
-  //console.log(user, `  :: `);
   res.json({"response":response_msg});
 }
 

@@ -1,0 +1,25 @@
+
+mat-card-content, mat-card-title, mat-card-actions {
+    text-align: center;
+}
+
+mat-card-content{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+mat-grid-list{
+    overflow-y: auto;
+}
+.advanced-color{
+    color: #3f51b5;
+}
+
+.beginner-color{
+    color: #f44336;
+}
+table {
+    width: 50%;
+    margin-left: 5%;
+    margin-top: 2%;
+  }

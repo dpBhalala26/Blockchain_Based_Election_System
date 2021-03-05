@@ -64,14 +64,17 @@
           <a mat-list-item routerLink="voter/home" (click)="sidenav.toggle()">Home</a>
         </mat-nav-list>
         <mat-nav-list>
-          <a mat-list-item routerLink="voter/election-voting" (click)="sidenav.toggle()">Elections</a>
+          <a mat-list-item routerLink="voter/elections-joined" (click)="sidenav.toggle()">Elections</a>
         </mat-nav-list>
-        <mat-nav-list>
+        <!-- <mat-nav-list>
           <a mat-list-item routerLink="#" (click)="sidenav.toggle()">About Us</a>
-        </mat-nav-list>
+        </mat-nav-list> -->
   
       </mat-sidenav>
       <mat-sidenav-content>
+        <div class="alert alert-primary" role="alert">
+          
+        </div>
         <router-outlet></router-outlet>
       </mat-sidenav-content>
     </mat-sidenav-container>
